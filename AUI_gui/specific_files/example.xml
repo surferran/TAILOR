@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<myXmlFile>
+	<system name="quads squad">
+		<unit name="quad 1" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/quad.jpg">
+			<var_in var_name="imu1_linear_accelerations" var_source="physics" data_units="m/s^2" ></var_in>
+			<var_in var_name="imu1_angular_rates" var_source="physics" data_units="rad/sec" ></var_in>
+			<var_in var_name="imu1_magnetometer_angles" var_source="physics" data_units="rad" ></var_in>			
+			<var_in var_name="imu1_barometer_pressure" var_source="physics" data_units="bar" ></var_in>		
+			<var_out var_name="lift_force_Z" var_source="inner" data_units="N" ></var_out>
+			<var_out var_name="side_force_XY" var_source="inner" data_units="N" ></var_out>
+			<var_in var_name="weight_force_Z" var_source="payload" data_units="N" ></var_in>
+			<var_in var_name="weight_force_XY" var_source="payload" data_units="N" ></var_in>
+		</unit>
+		<unit name="quad 2" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/quad.jpg">
+			<var_in var_name="imu2_linear_accelerations" var_source="physics" data_units="m/s^2" ></var_in>
+			<var_in var_name="imu2_angular_rates" var_source="physics" data_units="rad/sec" ></var_in>
+			<var_in var_name="imu2_magnetometer_angles" var_source="physics" data_units="rad" ></var_in>			
+			<var_in var_name="imu2_barometer_pressure" var_source="physics" data_units="bar" ></var_in>		
+			<var_out var_name="lift_force_Z" var_source="inner" data_units="N" ></var_out>
+			<var_out var_name="side_force_XY" var_source="inner" data_units="N" ></var_out>
+			<var_in var_name="weight_force_Z" var_source="payload" data_units="N" ></var_in>
+			<var_in var_name="weight_force_XY" var_source="payload" data_units="N" ></var_in>
+		</unit>
+		<unit name="payload" parent="quads squad" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/slung-load.jpg">
+			<var_in var_name="lift_force_Z" var_source="quad 1" data_units="N" ></var_in>
+			<var_in var_name="side_force_XY" var_source="quad 1" data_units="N" ></var_in>
+			<var_in var_name="lift_force_Z" var_source="quad 2" data_units="N" ></var_in>
+			<var_in var_name="side_force_XY" var_source="quad 2" data_units="N" ></var_in>
+			<var_out var_name="weight_force_Z" var_source="inner" data_units="N" ></var_out>
+			<var_out var_name="weight_force_XY" var_source="inner" data_units="N" ></var_out>
+		</unit>
+	</system>
+
+	<root_element_TAG__that_has_children_list_for_elemets>
+		<tag>element_text</tag>
+		<tag_with_attributes_dictionary attrib_str="value_str" attrib_str_2="value_str_2">
+			<tag>element_text</tag> 
+		</tag_with_attributes_dictionary> 
+	</root_element_TAG__that_has_children_list_for_elemets>
+</myXmlFile>

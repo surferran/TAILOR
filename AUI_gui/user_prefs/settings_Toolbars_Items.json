@@ -1,0 +1,85 @@
+{
+"tb_1" : {
+	"toolbar_title"  		: "main texts",
+    "toolbar_buttons_type"	: "icon_with_text", 
+    "ID_string"	     		: "favorites_tbar",   
+	"tb_properties"  		: "aui.AUI_TB_OVERFLOW | aui.AUI_TB_TEXT | aui.AUI_TB_HORZ_TEXT",
+	"buttons"       : 
+	 [
+		{ "btn1" : {
+			"btn_type"	  : "AddSimpleTool",
+			"btn_label"   : "Open",
+			"btn_icon"	  : "wx.ArtProvider.GetBitmap(wx.ART_FILE_OPEN  , wx.ART_OTHER, wx.Size(16, 16))",
+			"btn_tooltip" : "open file(s), of any kind. treat them accordingly",
+			"ID_string"	  : "ID_SampleItem+23",
+			"action_to_be_evaluated"  : "self.OnButtonPress"
+			}
+		},
+		{ "btn2" : {
+			"btn_type"	  : "AddSimpleTool",
+			"btn_label"   : "Show App Data",
+			"btn_icon"	  : "wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_OTHER, wx.Size(16, 16))",
+			"btn_tooltip" : "Show App Data in floating list",
+			"ID_string"	  : "ID_SampleItem+24",
+			"action_to_be_evaluated"  : "self.OnButtonPress"
+			}
+		},
+		{ "seperator" : "AddSeparator"
+		},
+		{ "btn3" : {
+			"btn_type"	  : "AddSimpleTool",
+			"btn_label"   : "Reload CSV",
+			"btn_icon"	  : "wx.ArtProvider.GetBitmap(wx.ART_NORMAL_FILE, wx.ART_OTHER, wx.Size(16, 16))",
+			"btn_tooltip" : "reload predefined files",
+			"ID_string"	  : "ID_SampleItem+25",
+			"action_to_be_evaluated"  : "self.OnButtonPress"
+			}
+		},
+		{ "seperator" : "AddSeparator"
+		}
+	 ]
+	},
+
+"tb_2" : {
+	"toolbar_title"  		: "side big icons",
+    "toolbar_buttons_type"	: "sized_icons", 
+    "ID_string"	     		: "vertical_tbar",
+	"tb_properties"  		: "aui.AUI_TB_OVERFLOW | aui.AUI_TB_VERTICAL",
+	"buttons"       : 
+	 [
+		{ "btn1" : {
+			"btn_type"	  : "AddSimpleTool",
+			"btn_label"   : "test info",
+			"btn_icon"	  : "wx.ArtProvider.GetBitmap(wx.ART_INFORMATION, wx.ART_OTHER, wx.Size(16, 16))",
+			"btn_tooltip" : "todo: set information print",
+			"ID_string"	  : "ID_SampleItem + 32",
+			"action_to_be_evaluated"  : "self.OnButtonPress"
+			}
+		},
+		{ "seperator" : {
+			"btn_type"	  : "todo",
+			"btn_icon"	  : "list",
+			"btn_tooltip" : "show tree view of the loaded data objects",
+			"ID_string"	  : "ID_tb_btn_show_data",
+			"action_to_be_evaluated"      : "self.show_data_tree()"
+			}
+		},
+		{ "seperator" : {
+			"btn_type"	  : "todo",
+			"btn_icon"	  : "list",
+			"btn_tooltip" : "load pre selected files",
+			"ID_string"	  : "ID_tb_btn_load_pre_defined_data",
+			"action_to_be_evaluated"      : "self.load_specific_data()"
+			}
+		},
+		{ "seperator" : {
+			"btn_type"	  : "todo",
+			"btn_icon"	  : "list",
+			"btn_tooltip" : "run script from given file",
+			"ID_string"	  : "ID_tb_btn_run_script_file",
+			"action_to_be_evaluated"      : "self.run_script()"
+			}
+		}
+	 ]
+	}
+}

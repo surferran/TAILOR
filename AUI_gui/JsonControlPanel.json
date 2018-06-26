@@ -1,0 +1,20 @@
+{
+"btn1" : {
+    "btn_type"	: "SpinCtrl", 
+    "ID_string"	: "ID_PaneBorderSize",
+	"label_text": "Pane Border Size:",
+	"init_value": "self._frame.GetDockArt().GetMetric(aui.AUI_DOCKART_PANE_BORDER_SIZE)"
+	},
+"btn2" : {
+    "btn_type"	: "SpinCtrl", 
+    "ID_string"	: "ID_SashSize",
+	"label_text": "Sash Size:",
+	"init_value": "self._frame.GetDockArt().GetMetric(aui.AUI_DOCKART_SASH_SIZE)"
+	},
+"btn3" : {
+    "btn_type"	: "SpinCtrl", 
+    "ID_string"	: "ID_CaptionSize",
+	"label_text": "Caption Size:",
+	"init_value": "self._frame.GetDockArt().GetMetric(aui.AUI_DOCKART_CAPTION_SIZE)"
+	}
+}
