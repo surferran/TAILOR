@@ -1,0 +1,2 @@
+1/ create shpinx doc for the Aui project
+2/ aui gui - open list of variables in notebookAui. when dblClked in AppDataTree.
