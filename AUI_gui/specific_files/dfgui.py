@@ -293,7 +293,7 @@ class DataframePanel(wx.Panel):
     Panel providing the main data frame table view.
     """
     def __init__(self, parent, df, status_bar_callback):
-        wx.Panel.__init__(self, parent)
+        wx.Panel.__init__(self, parent) # todo: add size and location on screen center
 
         self.df_list_ctrl = ListCtrlDataFrame(self, df, status_bar_callback)
 

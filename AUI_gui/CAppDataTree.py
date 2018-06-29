@@ -95,7 +95,9 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             self.AppendItem(sub_item, item.Type, 1)
             self.AppendItem(sub_item, str(item.fileID), 1)
             self.AppendItem(sub_item, item.dataTimeStamp, 1)
-
+            '''
+            self.AppendItem(sub_item, str(item.Shape()))
+            '''
             # tree.SetItemData(sub_item, item)  # will create copy also of the data
             self.SetItemData(sub_item, item.fileID)
 
@@ -109,6 +111,9 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         pass
 
     def treeItemActivated(self, event=None):
+        """
+        activated when user presses double click on the item
+        """
         if __debug__:
             print "tree dbl clk"
 
@@ -197,13 +202,18 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             ########
 
     def OnRightUp(self, event):
+        """
+        create the pop up menu for the application db items tree.
+        """
 
-        item = self.item
-        
-        if not item:
+        # item is dependend on creation in 'OnRightDown()'
+        if not self.item:
+            print "item is nan.. (in OnRightUp)"
             event.Skip()
             return
-        
+
+        item = self.item
+
         # Item Text Appearance
         back   = self.GetItemBackgroundColour(item)
         fore   = self.GetItemTextColour(item)
@@ -213,12 +223,12 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         # Generic Item's Info
         children  = self.GetChildrenCount(item)
         text      = self.GetItemText(item)
-        pydata    = self.GetPyData(item)
+        itemdata    = self.GetItemData(item)
         
         self.current = item
         # todo: read from json i.e 'appDBtreePopUpItems.json'
         self.itemdict = {"back": back, "fore": fore, "isbold": isbold, "font": font,
-                         "children": children, "text": text, "pydata": pydata}
+                         "children": children, "text": text, "itemdata": itemdata}
         
         ''''''
         menu = wx.Menu()
@@ -254,19 +264,70 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 #        self.Bind(wx.EVT_MENU, self.OnItemForeground, item2)
         self.Bind(wx.EVT_MENU, self.OnItemBold, item3)
 #        self.Bind(wx.EVT_MENU, self.OnItemFont, item4)
-        self.Bind(wx.EVT_MENU, self.OnItemDelete, item5)
 
-        self.Bind(wx.EVT_MENU, self.OnObjList, item10)
+        self.Bind(wx.EVT_MENU, self.OnObjVarList, item10)
         self.Bind(wx.EVT_MENU, self.OnObjShowTrimmed, item11)
         self.Bind(wx.EVT_MENU, self.OnObjPrintTable, item12)
         self.Bind(wx.EVT_MENU, self.OnObjShowSummary, item13)
         # self.Bind(wx.EVT_MENU, self.OnObjsCompareVars, item14)
         # self.Bind(wx.EVT_MENU, self.OnObjsCompare, item15)
+        
+        self.Bind(wx.EVT_MENU, self.OnItemDelete, item5)
 
         self.PopupMenu(menu)
         menu.Destroy()
 
-    def OnObjList(self, event):
+    def OnObjVarList(self, event):
+        """ 
+        show list of variables of selected DataFrame item
+
+        event here is CommandEvent
+        """
+
+        if __debug__:
+            print "show item var list"
+
+        treeItem            = event.EventObject.Window # type of Menu->Tree
+        selectedItem        = event.EventObject.Window.Selections[0]
+        selectedItemParent  = treeItem.GetItemParent(selectedItem)
+        selectedItemLabel   = treeItem.GetItemText(selectedItem)
+
+        appDataRelevantFileID = treeItem.GetItemData(selectedItem)
+        if appDataRelevantFileID == None and selectedItemLabel!="Loaded data files":
+                appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
+
+        print "valid tree id? : " + str(selectedItem.IsOk())
+        print "number of items in whole tree: " + str(treeItem.GetCount())
+
+        if appDataRelevantFileID > -1:  #todo: change -1 to some app constant
+            print 'appDataRelFileID gt -1'
+            if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
+                parentWindowCtrl = self.Parent.Parent
+                DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
+
+                # show data in wx table under parent, with stored identification related to main appData
+                ##                 specific_files.dfgui.show(DFdata)
+#                trimmedDF = DFdata.keys()
+                trimmedDF = specific_files.dfgui.pd.DataFrame( {"keys":list(DFdata.columns.values)} ) # .transpose()
+                print trimmedDF
+                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
+                parentWindowCtrl.Create_DFtable(wxPnl)
+
+#        pieces = []
+#        # todo: condition with .not. multi selection tree
+#        # item = treeItem.GetSelection()
+#        items = treeItem.GetSelections()
+#        for item in items:
+#            while item:
+#                piece = treeItem.GetItemText(item)
+#                pieces.insert(0, piece)
+#                item = treeItem.GetItemParent(item)
+#        print "item path tree : "
+#        print pieces
+        ##
+        # wx.MessageBox("msg box")
+###################################################
+
         pass
     def OnObjShowTrimmed(self, event):
         pass
