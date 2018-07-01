@@ -30,9 +30,9 @@ def create_dummy_data(size):
         for delta in np.random.randint(1, 50, size)
     ]
 
-    dictd = {0:  choice("A", "B", "C")}
-
-    return pd.DataFrame(dictd)
+    # dictd = {0:  choice("A", "B", "C")}
+    #
+    # return pd.DataFrame(dictd)
     #
     # return pd.DataFrame.from_items([
     #     ("StringColumn", choice("A", "B", "C"))

@@ -1735,9 +1735,10 @@ class AuiFrame(wx.Frame):
         treeCtrl.populateTree(self._appDataRef)
         self._mgr.Update()
 
-    def Create_DFtable(self, DFpanel, event=0): # activated by external CAppDataTree action
-        frame_title = "selected data file table"
-
+    def Create_DFtable(self, DFpanel, frame_title = "selected data file table"):
+        """
+        activated by an external CAppDataTree action
+        """
         tblCtrl = DFpanel
         self._mgr.AddPane(tblCtrl, aui.AuiPaneInfo().
                           Caption(frame_title).

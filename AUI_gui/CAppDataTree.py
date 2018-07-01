@@ -95,9 +95,9 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             self.AppendItem(sub_item, item.Type, 1)
             self.AppendItem(sub_item, str(item.fileID), 1)
             self.AppendItem(sub_item, item.dataTimeStamp, 1)
-            '''
-            self.AppendItem(sub_item, str(item.Shape()))
-            '''
+            ''''''
+            self.AppendItem(sub_item, str(item.loadedData.shape), 1)
+            ''''''
             # tree.SetItemData(sub_item, item)  # will create copy also of the data
             self.SetItemData(sub_item, item.fileID)
 
@@ -137,6 +137,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             print selectedItemParent
             if selectedItemLabel!="Loaded data files":
                 appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
+                selectedItemLabel   = treeItem.GetItemText(selectedItemParent)
 
         # treeItem.SelectItem(selectedItem)
 
@@ -154,6 +155,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 
         if appDataRelevantFileID > -1:  #todo: change -1 to some app constant
             print 'appDataRelFileID gt -1'
+            #todo  if self.Parent.Parent. is valid only when tree is not docked.
+            # otherwise relate to other parent
             if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
                 parentWindowCtrl = self.Parent.Parent
                 DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
@@ -166,7 +169,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 trimmedDFcols = min(6, len(list(DFdata))) # todo: put as constants from INI
                 trimmedDF = dfActions.get_trimmed_DF(DFdata, trimmedDFrows, trimmedDFcols)
                 wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
-                parentWindowCtrl.Create_DFtable(wxPnl)
+                panelTitle = selectedItemLabel + " data table"
+                parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
 
                 headersList = list(DFdata.columns.values) # or list(DFdata)  # can tty also sorted(DFdata)
                 print headersList
@@ -295,6 +299,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         appDataRelevantFileID = treeItem.GetItemData(selectedItem)
         if appDataRelevantFileID == None and selectedItemLabel!="Loaded data files":
                 appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
+                selectedItemLabel     = treeItem.GetItemText(selectedItemParent)
 
         print "valid tree id? : " + str(selectedItem.IsOk())
         print "number of items in whole tree: " + str(treeItem.GetCount())
@@ -311,7 +316,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 trimmedDF = specific_files.dfgui.pd.DataFrame( {"keys":list(DFdata.columns.values)} ) # .transpose()
                 print trimmedDF
                 wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
-                parentWindowCtrl.Create_DFtable(wxPnl)
+                panelTitle = selectedItemLabel + " variables"
+                parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
 
 #        pieces = []
 #        # todo: condition with .not. multi selection tree
