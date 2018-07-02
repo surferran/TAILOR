@@ -269,6 +269,8 @@ class ListCtrlDataFrame(wx.ListCtrl):
             wx.TheClipboard.Open()
             wx.TheClipboard.SetData(clipdata)
             wx.TheClipboard.Close()
+        
+        ##todo: add popup menu
 
     def OnGetItemText(self, item, col):
         """
