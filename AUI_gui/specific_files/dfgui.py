@@ -73,13 +73,14 @@ class ListCtrlDataFrame(wx.ListCtrl):
     DEFAULT_COLUMN_WIDTH = 100
     TMP_SELECTION_COLUMN = 'tmp_selection_column'
 
-    def __init__(self, parent, df, status_bar_callback):
+    def __init__(self, parent, df, status_bar_callback, callingParent):
         wx.ListCtrl.__init__(
             self, parent, -1,
             style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES | wx.LC_VRULES | wx.LB_MULTIPLE
         )
         self.status_bar_callback = status_bar_callback
 
+        self.callingParent = callingParent
         self.df_orig = df
         self.original_columns = self.df_orig.columns[:]
         self.current_columns = self.df_orig.columns[:]
@@ -269,6 +270,13 @@ class ListCtrlDataFrame(wx.ListCtrl):
             wx.TheClipboard.Open()
             wx.TheClipboard.SetData(clipdata)
             wx.TheClipboard.Close()
+            
+            '''
+            # if keys column - find the relevant DF and plot that field. 
+            '''
+            self.callingParent.Create_Var_Plot(str(values['keys']))
+            
+            
         
         ##todo: add popup menu
 
@@ -297,7 +305,7 @@ class DataframePanel(wx.Panel):
     def __init__(self, parent, df, status_bar_callback):
         wx.Panel.__init__(self, parent) # todo: add size and location on screen center
 
-        self.df_list_ctrl = ListCtrlDataFrame(self, df, status_bar_callback)
+        self.df_list_ctrl = ListCtrlDataFrame(self, df, status_bar_callback, parent)
 
         sizer = wx.BoxSizer(wx.VERTICAL)
         sizer.Add(self.df_list_ctrl, 1, wx.ALL | wx.EXPAND | wx.GROW, 5)

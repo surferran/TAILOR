@@ -978,7 +978,7 @@ class AuiFrame(wx.Frame):
         elif event.EventObject._tip_item.label == "Reload CSV":
             print "reloading"
 #            basePath = './simOutputsData/'   
-            basePath = '../bokeh_app/data/'
+            basePath = '../bokeh/bokeh_app/data/'
             fileDict1 = files_handler.get_file_details(basePath + 'quad_sim.csv')            
             fileDict2 = files_handler.get_file_details(basePath + 'titanic3.csv')
             fileDict3 = files_handler.get_file_details(basePath + 'tips.csv')
@@ -1746,6 +1746,10 @@ class AuiFrame(wx.Frame):
                           FloatingSize(wx.Size(150, 300)).MinimizeButton(True))
 
         self._mgr.Update()
+        
+    def Create_Var_Plot(self, var):
+        print ("called for variable named: "+str(var))
+        pass
 
     def OnCreateRanTree(self, event=0, name="", caption="Ran Tree Control", update=True, option=2):
 
