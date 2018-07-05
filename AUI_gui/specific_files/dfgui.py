@@ -274,7 +274,8 @@ class ListCtrlDataFrame(wx.ListCtrl):
             '''
             # if keys column - find the relevant DF and plot that field. 
             '''
-            self.callingParent.Create_Var_Plot(str(values['keys']))
+            if 'keys' in values.keys():
+                self.callingParent.Create_Var_Plot(str(values['keys']))
             
             
         
