@@ -1,0 +1,8 @@
+{
+	"1" : 
+		{
+		"phase name":"(download) copy from source to local",
+		"action function":"block1_module.get_source_to_local"
+		},
+	"2":{}	
+}
