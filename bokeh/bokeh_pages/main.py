@@ -111,7 +111,7 @@ def make_page_flow(doc):
         doc.title = "work flow page"
     
 #    if __name__=='__main__':
-#    update()
+    update()
 
 if __name__=='__main__':
     
