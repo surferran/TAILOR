@@ -38,7 +38,7 @@ if __name__ == '__main__':
     
 #    create_bokeh_page()
 #    show(bkPage)
-    exe = './bokeh_pages/launch_server.bat'
+    exe = 'launch_server.bat'
     cmn.local_utils.os.system(exe)
     
     print "END of MAIN run"
