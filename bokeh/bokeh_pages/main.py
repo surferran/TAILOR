@@ -20,7 +20,7 @@ from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
-from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
+#from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
 
 #import bokeh
 #print (bokeh.__version__)
@@ -42,8 +42,6 @@ def make_document(doc):
     data_table = DataTable(source=source, columns=columns, width=800) # ,row_headers=None)
     table = widgetbox(data_table, width=880)
     
-#    doc.add_root(table)
-    
     def slider_table_update(attr, old, new):
         print ("slider update")
         print(attr)
@@ -59,16 +57,15 @@ def make_document(doc):
     slider = Slider(title="values range", start=0, end=100000, value=21000, step=1, width=800)
     slider.on_change('value', lambda attr, old, new: slider_table_update(attr, old, new))
     
-#    doc.add_root(slider)
-
 #    fig1 = figure(title='Line plot!') #, sizing_mode='scale_width')
 #    fig1.line(x=[1, 2, 3], y=[1, 4, 9])
-    fig2 = figure(title='salary - vs years scatter plot', width=500, height=400)
                   #, sizing_mode='scale_width') ) #  , y_range=(00000, 100000),
 #    fig2.scatter(x=source.data['years_experience'], y=source.data['salary'])
-    fig2.scatter(x='years_experience', y='salary', source=source)
 #                 title="scatter  example") #, xlabel="xlable", ylabel="ylabel")
 #    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
+                  
+    fig2 = figure(title='salary - vs years scatter plot', width=500, height=400)
+    fig2.scatter(x='years_experience', y='salary', source=source)
 
     callback = CustomJS(args=dict(source=source), code="""
         var data = source.data;
@@ -105,19 +102,19 @@ def make_document(doc):
 #    toggle.on_click(isToggleActive)
     checkbox.on_click(on_chkbx_clicked)
     radio.on_click(on_chkbx_clicked)
-#    
-#    def set_vbar():
-#        fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
-#        
-#        fig3 = figure(x_range=fruits, plot_height=250, title="Fruit Counts", toolbar_location=None, tools="")
-#        
-#        fig3.vbar(x=fruits, top=[5, 3, 4, 2, 4, 6], width=0.9)
-#        
-#        fig3.xgrid.grid_line_color = None
-#        fig3.y_range.start = 0
-#    
-#        return fig3 
-#    
+    
+    def set_vbar():
+        fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
+        
+        fig3 = figure(x_range=fruits, plot_height=250, title="Fruit Counts", toolbar_location=None, tools="")
+        
+        fig3.vbar(x=fruits, top=[5, 3, 4, 2, 4, 6], width=0.9)
+        
+        fig3.xgrid.grid_line_color = None
+        fig3.y_range.start = 0
+    
+        return fig3 
+    
     def event_chart_example():
         factors = ["a","b","c,","d"]
         x = [24.3, -22.3, -25, 6]
@@ -131,15 +128,12 @@ def make_document(doc):
         
         return dots
 
-#    doc.add_root(fig1)
-#    doc.add_root(fig2)
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
-#    phase3 = column(phase2, event_chart_example())#, set_vbar())
+    phase3 = column(phase2, event_chart_example())#, set_vbar())
 #    phase3 = column(toggle , checkbox, radio)
     
-    doc.add_root(phase2)
-#    doc.add_root(phase3)
+    doc.add_root(phase3)
 #    doc.add_root(toggleLayout)
     
 #    doc.add_root(event_chart_example())
