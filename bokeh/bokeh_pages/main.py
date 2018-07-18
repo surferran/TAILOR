@@ -14,12 +14,12 @@ import pandas as pd
 from bokeh.layouts import row, widgetbox, layout, column
 from bokeh.models import ColumnDataSource, CustomJS
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, NumberFormatter, CheckboxGroup, RadioGroup, Toggle
-from bokeh.io import curdoc
+from bokeh.io import curdoc, output_file
 
 from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
-from bokeh.plotting import figure 
+from bokeh.plotting import figure
 from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
 
 def event_chart_example(doc):
@@ -32,6 +32,8 @@ def event_chart_example(doc):
     
     dot.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
     dot.circle(x, factors, size=15, fill_color="orange", line_width=3,line_color=LineColor)
+    
+# ?   output_file("sec_indeces_output.html", title="events graph example")
     
     doc.add_root(dot)
 
@@ -77,6 +79,7 @@ def make_document(doc):
                   #, sizing_mode='scale_width') ) #  , y_range=(00000, 100000),
 #    fig2.scatter(x=source.data['years_experience'], y=source.data['salary'])
     fig2.scatter(x='years_experience', y='salary', source=source)
+#                 title="scatter  example") #, xlabel="xlable", ylabel="ylabel")
 #    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
 
     callback = CustomJS(args=dict(source=source), code="""
@@ -107,23 +110,29 @@ def make_document(doc):
         print(checked_option_ndx)
 #    toggle   = Toggle(label='Some on/off', button_type='success')
     toggle   = Button(label='change table by source', button_type='success')#, callback=callback)
-    toggleLayout = layout([toggle])
+#    toggleLayout = layout([toggle])
     
     checkbox = CheckboxGroup(labels=['foo', 'bar', 'baz'])
     radio = RadioGroup(labels=['2000', '2010', '2020'])    
 #    toggle.on_click(isToggleActive)
     checkbox.on_click(on_chkbx_clicked)
     radio.on_click(on_chkbx_clicked)
+    
+    fig3 = figure(title='bars from table', width=500, height=400)
+    fig3.bar(x='years_experience', y='salary', source=source)
+#             
+
+
 
 #    doc.add_root(fig1)
 #    doc.add_root(fig2)
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
-#    phase3 = column(toggleLayout , checkbox, radio)
+    phase3 = column(toggle , checkbox, radio)
     
     doc.add_root(phase2)
 #    doc.add_root(phase3)
-    doc.add_root(toggleLayout)
+#    doc.add_root(toggleLayout)
     
     callback.args['a']=slider
     callback.args['b']=toggle
