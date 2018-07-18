@@ -130,11 +130,11 @@ def make_document(doc):
 
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
-    phase3 = column(phase2, event_chart_example())#, set_vbar())
-#    phase3 = column(toggle , checkbox, radio)
+    phase3 = row(event_chart_example(), set_vbar())
+    phase4 = column(phase2, phase3 , checkbox, radio)
     
-    doc.add_root(phase3)
-#    doc.add_root(toggleLayout)
+    doc.add_root(phase4)
+    doc.add_root(toggle)
     
 #    doc.add_root(event_chart_example())
     
