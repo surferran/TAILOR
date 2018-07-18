@@ -22,12 +22,26 @@ from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure 
 from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
 
+def event_chart_example(doc):
+    factors = ["a","b","c,","d"]
+    x = [24.3, -22.3, -25, 6]
+    
+    LineColor=["green" if a>=0 else "red" for a in x]
+    
+    dot = figure(title="exapmple", y_range = factors, x_range = [-30,30])
+    
+    dot.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
+    dot.circle(x, factors, size=15, fill_color="orange", line_width=3,line_color=LineColor)
+    
+    doc.add_root(dot)
 
 def make_document(doc):
     doc.title = "Hello, world!"
     
-    df = pd.read_csv('salary_data.csv') 
-    source = ColumnDataSource(data=df) # dict())
+    df = pd.read_csv('salary_data.csv') # return dataframe
+    ''' make a copy of df. therefor changing the source will not affect df.
+        using df in update() will ~reset the source to original values '''
+    source = ColumnDataSource(data=df) # dict())  
         
     columns = [
         TableColumn(field="name", title="Employee Name"),
@@ -59,26 +73,62 @@ def make_document(doc):
 
 #    fig1 = figure(title='Line plot!') #, sizing_mode='scale_width')
 #    fig1.line(x=[1, 2, 3], y=[1, 4, 9])
-    fig2 = figure(title='salary - vs years scatter plot', width=500) #, sizing_mode='scale_width')
+    fig2 = figure(title='salary - vs years scatter plot', width=500, height=400)
+                  #, sizing_mode='scale_width') ) #  , y_range=(00000, 100000),
 #    fig2.scatter(x=source.data['years_experience'], y=source.data['salary'])
     fig2.scatter(x='years_experience', y='salary', source=source)
+#    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
+
+    callback = CustomJS(args=dict(source=source), code="""
+        var data = source.data;
+        
+        var A   = a.value;
+        var k   = b.value;
+        var phi = c.value;
+        var B   = d.value;
+        
+        var x = data['years_experience']
+        var y = data['salary']
+        
+        for (var i = 0; i < x.length; i++) {
+            y[i] =i*2.;
+        }
+        source.change.emit();
+    """)
     
-    def special_btn_chng():
-        print("special case")
-    toggle = Toggle(label='Some on/off', button_type='success')
+    def isToggleActive(status):
+        print("toggle case")
+        print(status)
+    def on_chkbx_clicked(list_of_checked_options):
+        print("chkbx case")
+        print(list_of_checked_options)
+    def on_radio_clicked(checked_option_ndx):
+        print("cradio case")
+        print(checked_option_ndx)
+#    toggle   = Toggle(label='Some on/off', button_type='success')
+    toggle   = Button(label='change table by source', button_type='success')#, callback=callback)
+    toggleLayout = layout([toggle])
+    
     checkbox = CheckboxGroup(labels=['foo', 'bar', 'baz'])
     radio = RadioGroup(labels=['2000', '2010', '2020'])    
-#    toggle.on_click(special_btn_chng)
-#    checkbox.on_change(special_btn_chng)
-#    radio.on_change(special_btn_chng)
+#    toggle.on_click(isToggleActive)
+    checkbox.on_click(on_chkbx_clicked)
+    radio.on_click(on_chkbx_clicked)
 
 #    doc.add_root(fig1)
 #    doc.add_root(fig2)
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
-    phase3 = column(toggle, checkbox, radio)
+#    phase3 = column(toggleLayout , checkbox, radio)
+    
     doc.add_root(phase2)
-    doc.add_root(phase3)
+#    doc.add_root(phase3)
+    doc.add_root(toggleLayout)
+    
+    callback.args['a']=slider
+    callback.args['b']=toggle
+    callback.args['c']=checkbox
+    callback.args['d']=radio
     
 #    slider_table_update()
     
@@ -134,19 +184,24 @@ def make_page_flow(doc):
     update()
 
 if __name__=='__main__':
+    print ("main caller")
+#    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
     
     apps1 = {'/': Application(FunctionHandler(make_document))}
     apps2 = {'/': Application(FunctionHandler(make_page_flow))}
+    apps2 = {'/': Application(FunctionHandler(event_chart_example))}
     
     server1 = Server(apps1, port=5008)
     server1.start()
-    server2 = Server(apps2, port=5007)
+#    server2 = Server(apps2, port=5007)
+#    server2.start()
+    server2 = Server(apps2, port=5009)
     server2.start()
 #    make_document()
     
     server1.show('/')
 #    print(server2.port)
-#    server2.show('/')
+    server2.show('/')
     
 #    # then http://localhost:5008/
     
@@ -156,4 +211,5 @@ if __name__=='__main__':
         server2.stop()
     
 else:
+    print("not main caller")
     make_page_flow(curdoc)  # default is port 5006
