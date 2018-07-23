@@ -22,13 +22,26 @@ from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
 #from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
 
+import bk_example
+
 #import bokeh
 #print (bokeh.__version__)
+
+fileName = 'C:/Users/Ran_the_User/Documents/GitHub/TAILOR/bokeh/bokeh_pages/'
+    
+def minimial_page_4_server_test(doc):
+    def button_reaction():
+        print("stopping server (self kill. restart)")
+        server1.stop()
+    doc.title = "**testing demo page**"
+    toggle   = Button(label='kill server', button_type='success')  # Options: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
+    toggle.on_click(button_reaction)
+    doc.add_root(toggle)
 
 def make_document(doc):
     doc.title = "Hello, world!"
     
-    df = pd.read_csv('salary_data.csv') # return dataframe
+    df = pd.read_csv(fileName+'salary_data.csv') # return dataframe
     ''' make a copy of df. therefor changing the source will not affect df.
         using df in update() will ~reset the source to original values '''
     source = ColumnDataSource(data=df) # dict())  
@@ -64,8 +77,15 @@ def make_document(doc):
 #                 title="scatter  example") #, xlabel="xlable", ylabel="ylabel")
 #    plot.line('x', 'y', source=source, line_width=3, line_alpha=0.6)
                   
-    fig2 = figure(title='salary - vs years scatter plot', width=500, height=400)
+    fig2 = figure(title='salary - vs years scatter plot', width=500, height=400, tools='pan, wheel_zoom')
     fig2.scatter(x='years_experience', y='salary', source=source)
+
+#    https://stackoverflow.com/questions/34646270/how-do-i-work-with-images-in-bokeh-python    
+    img_path = 'bokeh_pages/static/logo.png'
+    x_range = (-20,-10) # could be anything - e.g.(0,1)
+    y_range = (20,30)
+    fig2.image_url(url=[img_path],x=x_range[0],y=y_range[1],w=x_range[1]-x_range[0],h=y_range[1]-y_range[0])
+    
 
     callback = CustomJS(args=dict(source=source), code="""
         var data = source.data;
@@ -128,13 +148,20 @@ def make_document(doc):
         
         return dots
 
+#    fig2.axis.visible = False
+#    fig2.image
+
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
     phase3 = row(event_chart_example(), set_vbar())
     phase4 = column(phase2, phase3 , checkbox, radio)
     
+#    phase5 = bk_example.bk_example()
+#    doc.add_root(phase5)
+    
     doc.add_root(phase4)
     doc.add_root(toggle)
+    
     
 #    doc.add_root(event_chart_example())
     
@@ -153,7 +180,7 @@ def make_page_flow(doc):
 #        df = pd.read_csv('salary_data.csv')
 #    else:
 #    #    df = pd.read_csv('./bokeh_pages/salary_data.csv')
-    df = pd.read_csv('salary_data.csv')
+    df = pd.read_csv(fileName+'salary_data.csv')
 #    
     source = ColumnDataSource(data=dict())
 
@@ -197,35 +224,46 @@ def make_page_flow(doc):
     update()
 
 if __name__=='__main__':
+    case_test = True        
+    case_test = False
     print ("main caller")
-#    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
-    
-    apps1 = {'/': Application(FunctionHandler(make_document))}
-    apps2 = {'/': Application(FunctionHandler(make_page_flow))}
-#    apps3 = {'/': Application(FunctionHandler(event_chart_example))}
-    
-    server1 = Server(apps1, port=5007)
-    server1.start()
-    server2 = Server(apps2, port=5008)
-    server2.start()
-#    server3 = Server(apps3, port=5009)
-#    server3.start()
-#    make_document()
-    
-    server1.show('/')
-#    print(server1.port)
-    server2.show('/')
-#    server3.show('/')
-    
-#    # then http://localhost:5008/
-    
-    section=''
-#    tmp=input("Press Enter to continue...")
-#    section='special stop'
-    if section=='special stop':
-        server1.stop()
-        server2.stop()
-#        server3.stop()
+    if case_test:
+        app = {'/': Application(FunctionHandler(minimial_page_4_server_test))}
+        server1 = Server(app, port=5001)
+        server1.start()    
+        print(server1.port)
+        server1.show('/')
+#        break 
+    else:
+        print("main flow continue")
+    #    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
+        
+        apps1 = {'/': Application(FunctionHandler(make_document))}
+    #    apps2 = {'/': Application(FunctionHandler(make_page_flow))}
+    #    apps3 = {'/': Application(FunctionHandler(event_chart_example))}
+        
+        server1 = Server(apps1, port=5007)
+        server1.start()
+    #    server2 = Server(apps2, port=5008)
+    #    server2.start()
+    #    server3 = Server(apps3, port=5009)
+    #    server3.start()
+    #    make_document()
+        
+        server1.show('/')
+    #    print(server1.port)
+    #    server2.show('/')
+    #    server3.show('/')
+        
+    #    # then http://localhost:5008/
+        
+        section=''
+    #    tmp=input("Press Enter to continue...")
+    #    section='special stop'
+        if section=='special stop':
+            server1.stop()
+#            server2.stop()
+    #        server3.stop()
     
 else:
     print("not main caller")

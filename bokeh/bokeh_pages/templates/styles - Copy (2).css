@@ -3,6 +3,7 @@ color: #FDFEFE;
 background-color: #3e218c;
 border-color: #21618C;
 font-size : 20px;
+    style="font-size : 20px; width: 100%; height: 100px;"
 }
 .bk-root .bk-bs-btn-success:focus {
 color: #FDFEFE;
