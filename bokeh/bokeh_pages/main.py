@@ -12,7 +12,7 @@ from os.path import dirname, join
 import pandas as pd
 
 from bokeh.layouts import row, widgetbox, layout, column
-from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, BoxEditTool
+from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, BoxEditTool, CrosshairTool
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
                                     NumberFormatter, CheckboxGroup, RadioGroup, \
                                     Toggle, Panel, Tabs, CheckboxButtonGroup
@@ -180,15 +180,28 @@ def make_document(doc):
         
         LineColor=["green" if a>=0 else "red" for a in x]
         
-        dots_fig = figure(title="exapmple", y_range = factors, x_range = [-30,30], toolbar_location="below",  toolbar_sticky=False)
+        Tooltips = [
+            ("index", "$index"),
+            ("(x,y)", "($x, $y)")
+#            ("radius", "@radius"),
+#            ("fill color", "$color[hex, swatch]:fill_color"),
+#            ("x", "@x"),
+#            ("bar", "@bar"),
+        ]
+        dots_fig = figure(title="exapmple", y_range = factors, x_range = [-30,30], toolbar_location="below",  toolbar_sticky=False, \
+                          tools='lasso_select, poly_select, undo, redo, reset')
+#                          , \
+#                          tooltips=Tooltips)
         
         dots_fig.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
         c1 = dots_fig.circle(x, factors, size=15, fill_color="orange", line_width=3, line_color=LineColor)
         
         tool = BoxEditTool(renderers=[c1])
-        tool2 = BoxSelectTool(dimensions="width")
+        tool2 = BoxSelectTool(dimensions="width") # To make a multiple selection, press the SHIFT key. To clear the selection, press the ESC key
         
+        dots_fig.add_tools(tool) # disappears the points..
         dots_fig.add_tools(tool2)
+        dots_fig.add_tools(CrosshairTool(dimensions='height'))
         
         return dots_fig
 
