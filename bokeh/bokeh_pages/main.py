@@ -12,7 +12,7 @@ from os.path import dirname, join
 import pandas as pd
 
 from bokeh.layouts import row, widgetbox, layout, column
-from bokeh.models import ColumnDataSource, CustomJS
+from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, BoxEditTool
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
                                     NumberFormatter, CheckboxGroup, RadioGroup, \
                                     Toggle, Panel, Tabs, CheckboxButtonGroup
@@ -174,25 +174,30 @@ def make_document(doc):
     
         return fig3 
     
-    def event_chart_example():
+    def event_chart():
         factors = ["a","b","c,","d"]
         x = [24.3, -22.3, -25, 6]
         
         LineColor=["green" if a>=0 else "red" for a in x]
         
-        dots = figure(title="exapmple", y_range = factors, x_range = [-30,30])
+        dots_fig = figure(title="exapmple", y_range = factors, x_range = [-30,30], toolbar_location="below",  toolbar_sticky=False)
         
-        dots.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
-        dots.circle(x, factors, size=15, fill_color="orange", line_width=3,line_color=LineColor)
+        dots_fig.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
+        c1 = dots_fig.circle(x, factors, size=15, fill_color="orange", line_width=3, line_color=LineColor)
         
-        return dots
+        tool = BoxEditTool(renderers=[c1])
+        tool2 = BoxSelectTool(dimensions="width")
+        
+        dots_fig.add_tools(tool2)
+        
+        return dots_fig
 
 #    fig2.axis.visible = False
 #    fig2.image
 
     phase1 = column(table, slider)
     phase2 = row(phase1, fig2)
-    phase3 = row(event_chart_example(), set_vbar())
+    phase3 = row(event_chart(), set_vbar())
     phase4 = column(phase2, phase3 , checkbox, radio)
     
 #    phase5 = bk_example.bk_example()
@@ -206,7 +211,7 @@ def make_document(doc):
 #    doc.add_root(figImg)
     
     secPanelLy = column(toggle, figImg, checkbox_button_group)
-    tab2 = Panel(child=secPanelLy, title="other parts")
+    tab2 = Panel(child=secPanelLy, title="other parts", closable=False)
     
     tabs = Tabs(tabs=[ tab1, tab2 ])
     
