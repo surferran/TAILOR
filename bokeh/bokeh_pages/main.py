@@ -13,7 +13,9 @@ import pandas as pd
 
 from bokeh.layouts import row, widgetbox, layout, column
 from bokeh.models import ColumnDataSource, CustomJS
-from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, NumberFormatter, CheckboxGroup, RadioGroup, Toggle
+from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
+                                    NumberFormatter, CheckboxGroup, RadioGroup, \
+                                    Toggle, Panel, Tabs, CheckboxButtonGroup
 from bokeh.io import curdoc
 
 from bokeh.server.server import Server
@@ -156,6 +158,10 @@ def make_document(doc):
     checkbox.on_click(on_chkbx_clicked)
     radio.on_click(on_chkbx_clicked)
     
+    checkbox_button_group = CheckboxButtonGroup(
+            labels=["Option 1", "Option 2", "Option 3"], active=[0, 1])
+
+    
     def set_vbar():
         fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
         
@@ -192,11 +198,20 @@ def make_document(doc):
 #    phase5 = bk_example.bk_example()
 #    doc.add_root(phase5)
     
-    doc.add_root(phase4)
-    doc.add_root(toggle)
-    doc.add_root(figImg)
+#    doc.add_root(phase4)
     
+    tab1 = Panel(child=phase4, title="phase4 part")
     
+#    doc.add_root(toggle)
+#    doc.add_root(figImg)
+    
+    secPanelLy = column(toggle, figImg, checkbox_button_group)
+    tab2 = Panel(child=secPanelLy, title="other parts")
+    
+    tabs = Tabs(tabs=[ tab1, tab2 ])
+    
+    doc.add_root(tabs)
+
 #    doc.add_root(event_chart_example())
     
     callback.args['a']=slider
@@ -257,7 +272,7 @@ def make_page_flow(doc):
 #    if __name__=='__main__':
     update()
 
-case_test = True        
+case_test = False
 
 if __name__=='__main__':
 #    case_test = False
