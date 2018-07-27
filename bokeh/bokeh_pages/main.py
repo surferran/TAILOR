@@ -260,12 +260,12 @@ def make_page_flow(doc):
             'years_experience' : current.years_experience,
         }
     
-    slider = Slider(title="values range", start=0, end=100000, value=50000, step=1)
+    slider = Slider(title="values range", start=0, end=100000, value=20000, step=1)
     slider.on_change('value', lambda attr, old, new: update())
     
     def on_button_change():
         print("visiting on button change")
-    button = Button(label="phase #1 ", button_type="success") # button_type: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
+    button = Button(label="Phase #1 ", button_type="success") # button_type: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
     button.on_click(on_button_change)
 #    button.callback = CustomJS(args=dict(source=source),
 #                               code=open(join(dirname(__file__), "download.js")).read())
@@ -305,8 +305,8 @@ if __name__=='__main__':
         print("main flow continue")
     #    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
         
-        apps1 = {'/': Application(FunctionHandler(make_document))}
-    #    apps2 = {'/': Application(FunctionHandler(make_page_flow))}
+#        apps1 = {'/': Application(FunctionHandler(make_document))}
+        apps1 = {'/': Application(FunctionHandler(make_page_flow))}
     #    apps3 = {'/': Application(FunctionHandler(event_chart_example))}
         
         server1 = Server(apps1, port=5007)
