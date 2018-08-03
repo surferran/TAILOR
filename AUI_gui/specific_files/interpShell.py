@@ -3,7 +3,7 @@ import wx.stc as stc
 import code
 import sys
 
-print  "entered interpShell as : " + __name__
+print ( "entered interpShell as : " + __name__)
 
 # other posiible usage (but very simple and not flexible) :
 #   x = code.InteractiveConsole()
@@ -56,14 +56,14 @@ class PySTC(stc.StyledTextCtrl):
                     self.f.close()
                 elif self.cmd == "STDtoFile\n":
                     # ref https://www.blog.pythonlibrary.org/2016/06/16/python-101-redirecting-stdout/
-                    print "redirecting to file"
+                    print ("redirecting to file")
                     self.f = open('stdFlie.txt', 'w')
                     sys.stdout = self.f
                     sys.stderr = self.f
                 else:
                     # run command now
                     print('*' * 40)
-                    print "'" + self.cmd.replace("\n","") + "'" +" eval output is : \n"
+                    print ("'" + self.cmd.replace("\n","") + "'" +" eval output is : \n")
                     self.inter.Runit(self.cmd)
                     print('*' * 40)
                 self.cmd = ''
@@ -72,7 +72,7 @@ class PySTC(stc.StyledTextCtrl):
                 #     sys.stderr.flush()
                 #     sys.stdout.flush()
                 # except :
-                #     print "flush exception"
+                #     print ("flush exception")
                 #     pass
             else:
                 if ':' in ln:
@@ -93,7 +93,7 @@ class ecpintframe(wx.Frame):
         self.ed = PySTC(self, -1)
 
 if __name__ == '__main__':
-    print "activated by 3 : " + __name__
+    print ("activated by 3 : " + __name__)
     Ecpint = wx.PySimpleApp(0)
     class Strct():
         a='a'
@@ -110,4 +110,4 @@ if __name__ == '__main__':
     win.ed.SetInter(I)
     Ecpint.MainLoop()
 
-    print passedLocals
+    print (passedLocals)

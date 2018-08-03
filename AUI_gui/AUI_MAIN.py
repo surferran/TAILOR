@@ -598,19 +598,19 @@ class AuiFrame(wx.Frame):
             #:todo: set win size to min. set as external win.
             # get screen resolution
 
-            print self
-            print self.GetSize()
-            print self.GetParent()
-            print self.GetParent().GetSize()
-            print self.GetParent().GetParent()
-            print self.GetParent().GetParent().GetSize()
+            print (self)
+            print (self.GetSize())
+            print (self.GetParent())
+            print (self.GetParent().GetSize())
+            print (self.GetParent().GetParent())
+            print (self.GetParent().GetParent().GetSize())
 
-            print self
-            print self.GetPosition()
-            print self.GetParent()
-            print self.GetParent().GetPosition()
-            print self.GetParent().GetParent()
-            print self.GetParent().GetParent().GetPosition()
+            print (self)
+            print (self.GetPosition())
+            print (self.GetParent())
+            print (self.GetParent().GetPosition())
+            print (self.GetParent().GetParent())
+            print (self.GetParent().GetParent().GetPosition())
         # set locations
         if 2==2:
             # desiredFramePos = wx.Point(1200,100)
@@ -626,12 +626,12 @@ class AuiFrame(wx.Frame):
             self.SetSize(desiredFrameSize)
 
             if 2==1:
-                print self
-                print self.GetPosition()
-                print self.GetParent()
-                print self.GetParent().GetPosition()
-                print self.GetParent().GetParent()
-                print self.GetParent().GetParent().GetPosition()
+                print (self)
+                print (self.GetPosition())
+                print (self.GetParent())
+                print (self.GetParent().GetPosition())
+                print (self.GetParent().GetParent())
+                print (self.GetParent().GetParent().GetPosition())
 
             # self.CenterOnScreen()
             # set size  , previousSize =
@@ -640,7 +640,7 @@ class AuiFrame(wx.Frame):
             w = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_X)
             h = wx.SystemSettings.GetMetric(wx.SYS_SCREEN_Y)
             centerPos = (w / 2, h / 2)
-            print "screen centerPos : " + str(centerPos[0]) + "," + str(centerPos[1])
+            print ("screen centerPos : " + str(centerPos[0]) + "," + str(centerPos[1]))
 
         # "commit" all changes made to AuiManager
         self._mgr.Update()
@@ -864,7 +864,7 @@ class AuiFrame(wx.Frame):
 
 
     def OnButtonPress(self, event):
-        print  "onBtnPrs"
+        print  ("onBtnPrs")
         # ref: https://wxpython.org/Phoenix/docs/html/wx.FileDialog.html?highlight=filedialog%20style
 
         # This is how you pre-establish a file filter so that the dialog
@@ -973,10 +973,10 @@ class AuiFrame(wx.Frame):
             # BAD things can happen otherwise!
             dlg.Destroy()
         elif event.EventObject._tip_item.label == "Show App Data":
-            print "build app data tree"
+            print ("build app data tree")
             self.OnCreate_AppDataTree()
         elif event.EventObject._tip_item.label == "Reload CSV":
-            print "reloading"
+            print ("reloading")
 #            basePath = './simOutputsData/'   
             basePath = '../bokeh/bokeh_app/data/'
             fileDict1 = files_handler.get_file_details(basePath + 'quad_sim.csv')            
@@ -1005,10 +1005,10 @@ class AuiFrame(wx.Frame):
         try:
             self.gauge.Pulse()
         except RuntimeError:   # wx.PyDeadObjectError:
-            print "TimerHandler event : wx.PyDeadObjectError exception "
+            print ("TimerHandler event : wx.PyDeadObjectError exception ")
             self.timer.Stop()
         except:
-            print "TimerHandler event : no gauge.Pulse() object - stopping the timer"
+            print ("TimerHandler event : no gauge.Pulse() object - stopping the timer")
             self.timer.Stop()
 
 
@@ -2070,8 +2070,8 @@ class AuiFrame(wx.Frame):
         if wx.Platform != '__WXMAC__':
             try:
                 #dlg.SetFont(wx.Font(8, wx.NORMAL, wx.NORMAL, wx.NORMAL, False))
-				dlg.SetFont(wx.Font(8, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL,
-                                False, '', wx.FONTENCODING_DEFAULT))
+#    				dlg.SetFont(wx.Font(8, wx.FONTFAMILY_DEFAULT, wx.FONTSTYLE_NORMAL, wx.FONTWEIGHT_NORMAL, False, '', wx.FONTENCODING_DEFAULT))
+                pass
             except: #ran
                 pass
 
@@ -2150,7 +2150,7 @@ class AuiFrame(wx.Frame):
 
         return obj
     def OnPaste(self):
-        print "onPaste event reaction"
+        print("onPaste event reaction")
 
     def CreateRan_PanelCtrl(self):
         # frame = wx.Frame(None, wx.ID_ANY, "Hello World")  # A Frame is a top-level window.

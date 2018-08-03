@@ -324,7 +324,7 @@ class JsonControlPanel(wx.Panel):
 ########################################################################
 
 if __name__=='__main__':
-    print "running from main"
+    print ("running from main")
 
     json_string = '{"first_name": "Guido", "last_name":"Rossum"}'
     parsed_json = json.loads(json_string)
@@ -333,11 +333,11 @@ if __name__=='__main__':
 
     import os
     import sys
-    print "file: "+__file__
-    print "abspath: "+os.path.abspath(__file__)
+    print ("file: "+__file__)
+    print ("abspath: "+os.path.abspath(__file__))
     dirName = os.path.dirname(os.path.abspath(__file__))
-    print "to add: "
-    print os.path.split(dirName)
+    print ("to add: ")
+    print (os.path.split(dirName))
     sys.path.append(os.path.split(dirName)[0])
 
     sys.path.append('../')

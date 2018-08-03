@@ -106,7 +106,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
     def deleteItemFromTree(self, itemID = None):
 #        self.items
         if (itemID):
-            print self.items[itemID]
+            print (self.items[itemID])
             del self.items[itemID]
         pass
 
@@ -115,10 +115,10 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         activated when user presses double click on the item
         """
         if __debug__:
-            print "tree dbl clk"
+            print ("tree dbl clk")
 
-        # print time.time()
-        # print time.ctime()
+        # print (time.time())
+        # print (time.ctime())
         treeItem            = event.EventObject
         selectedItem        = event.EventObject.Selections[0]
         selectedItemLabel   = treeItem.GetItemText(selectedItem)
@@ -126,23 +126,23 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 
         appDataRelevantFileID = treeItem.GetItemData(selectedItem)
         if appDataRelevantFileID == None:
-            print "appDataRelevantFileID == None"
-            print "treeItem"
-            print treeItem
-            print "selectedItem"
-            print selectedItem
-            print "selectedItemLabel"
-            print selectedItemLabel
-            print "selectedItemParent:"
-            print selectedItemParent
+            print ("appDataRelevantFileID == None")
+            print ("treeItem")
+            print (treeItem)
+            print ("selectedItem")
+            print (selectedItem)
+            print ("selectedItemLabel")
+            print (selectedItemLabel)
+            print ("selectedItemParent:")
+            print (selectedItemParent)
             if selectedItemLabel!="Loaded data files":
                 appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
                 selectedItemLabel   = treeItem.GetItemText(selectedItemParent)
 
         # treeItem.SelectItem(selectedItem)
 
-        print "valid tree id? : " + str(event.EventObject.Selections[0].IsOk())
-        print "number of items in whole tree: " + str(treeItem.GetCount())
+        print ("valid tree id? : " + str(event.EventObject.Selections[0].IsOk()))
+        print ("number of items in whole tree: " + str(treeItem.GetCount()))
 
         # if (treeItem.Children):
         #     treeItem.SelectChildren()
@@ -154,7 +154,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         # treeItem.SelectItem(treeRoot)
 
         if appDataRelevantFileID > -1:  #todo: change -1 to some app constant
-            print 'appDataRelFileID gt -1'
+            print ('appDataRelFileID gt -1')
             #todo  if self.Parent.Parent. is valid only when tree is not docked.
             # otherwise relate to other parent
             if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
@@ -173,7 +173,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
 
                 headersList = list(DFdata.columns.values) # or list(DFdata)  # can tty also sorted(DFdata)
-                print headersList
+                print (headersList)
         ##
         pieces = []
         # todo: condition with .not. multi selection tree
@@ -184,8 +184,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 piece = treeItem.GetItemText(item)
                 pieces.insert(0, piece)
                 item = treeItem.GetItemParent(item)
-        print "item path tree : "
-        print pieces
+        print ("item path tree : ")
+        print (pieces)
         ##
         # wx.MessageBox("msg box")
 ###################################################
@@ -212,7 +212,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 
         # item is dependend on creation in 'OnRightDown()'
         if not self.item:
-            print "item is nan.. (in OnRightUp)"
+            print ("item is nan.. (in OnRightUp)")
             event.Skip()
             return
 
@@ -289,7 +289,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         """
 
         if __debug__:
-            print "show item var list"
+            print ("show item var list")
 
         treeItem            = event.EventObject.Window # type of Menu->Tree
         selectedItem        = event.EventObject.Window.Selections[0]
@@ -301,11 +301,11 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
                 selectedItemLabel     = treeItem.GetItemText(selectedItemParent)
 
-        print "valid tree id? : " + str(selectedItem.IsOk())
-        print "number of items in whole tree: " + str(treeItem.GetCount())
+        print ("valid tree id? : " + str(selectedItem.IsOk()))
+        print ("number of items in whole tree: " + str(treeItem.GetCount()))
 
         if appDataRelevantFileID > -1:  #todo: change -1 to some app constant
-            print 'appDataRelFileID gt -1'
+            print ('appDataRelFileID gt -1')
             if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
                 parentWindowCtrl = self.Parent.Parent
                 DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
@@ -314,7 +314,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 ##                 specific_files.dfgui.show(DFdata)
 #                trimmedDF = DFdata.keys()
                 trimmedDF = specific_files.dfgui.pd.DataFrame( {"keys":list(DFdata.columns.values)} ) # .transpose()
-                print trimmedDF
+                print (trimmedDF)
                 wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
                 panelTitle = selectedItemLabel + " variables"
                 parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
@@ -353,8 +353,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 
     def OnItemDelete(self, event):
 
-        print "item selected is : " 
-        print self.current
+        print ("item selected is : " )
+        print (self.current)
         selectedIndex = self.current  # type of TreeItemId
         # todo: itemDBid = get field of item ID in appData object
         
@@ -381,7 +381,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         if __debug__:
             print("right clicked ")
 
-        print time.ctime()
+        print (time.ctime())
         treeItem        = event.EventObject
         selectedItem    = event.EventObject.Selections[0]
         selectedItemLabel   = treeItem.GetItemText(selectedItem)
@@ -403,8 +403,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             piece = treeItem.GetItemText(item)
             pieces.insert(0, piece)
             item = treeItem.GetItemParent(item)
-        print "item path tree : "
-        print pieces
+        print ("item path tree : ")
+        print (pieces)
         pass
         list(parentWindowCtrl._appDataRef.mainDict[0].loadedData)
 ###################################################

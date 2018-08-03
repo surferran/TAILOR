@@ -31,7 +31,7 @@ def plot_quad_system_geometry(stateSolMat, timeStep):
     # ax.axis todo: set limits to axes so they are bigger then expected geometry
 
     ax.scatter(stateSol[0], stateSol[2], s=20, c='b') #stateSol[:,0]
-    print stateSol[0], stateSol[2]
+    print (stateSol[0], stateSol[2])
 
     # # LumpedMass payload
     # lumpedPayload = Circle((stateSol[0,0], stateSol[0,0]), 13)
@@ -48,14 +48,15 @@ def plot_quad_system_geometry(stateSolMat, timeStep):
     Rectangle.set_alpha(rectPayload, 0.71)   #1-opac 0-transparent
     ax.add_patch(rectPayload)
 
-    return fig
+    return ax 
 
 def axAddStars(ax):
     '''
     ax is a given figure axis, to add stars-likes, to it. in 2D.
     '''
     # Some stars (real stars should *NOT* move so quickly!)
-    ax.set_axis_bgcolor('#060A49')
+#    ax.set_`
+#    ax.set_axis_bgcolor('#060A49')
     for k in range(50):
         fact = 1
         rangeX = 15
@@ -177,8 +178,8 @@ def close_the_opened_plots(fig=None):
 # pointMass.remove()
 
 if __name__=='__main__':
-    ax = plot_quad_system_geometry([0,1,2,3,4,5])
-    axAddStarts(ax)
+    ax = plot_quad_system_geometry([[0,1,2,3,4,5]], 0)
+    axAddStars(ax)
     show_the_constructed_plots()
 else:
     # print __name__

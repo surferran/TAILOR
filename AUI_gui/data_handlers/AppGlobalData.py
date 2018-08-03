@@ -36,8 +36,8 @@ class myAppData(dict):
         self.testField      = 'c'
         self.lastFileID     = -1
         if __debug__:
-            print "initialized appDB"
-            print self
+            print ("initialized appDB")
+            print (self)
 
     def incFileID(self):
         self.lastFileID += 1
@@ -56,9 +56,9 @@ class myAppData(dict):
 
 if __name__=='__main__':
     appDict = myAppData()
-    print appDict.testField
+    print (appDict.testField)
     appDict.initializeDataFields()
-    print appDict.testField
+    print (appDict.testField)
 
     tmp1 = appDict.fileObjClass()
     tmp1.Name='rtrial.file'
@@ -68,10 +68,10 @@ if __name__=='__main__':
     tmp1.Type='.py'
 
     tmp2 = appDict.fileObjClass()
-    tmp2.Name = 'C:\Users\Ran_the_User\Documents\GitHub\pyFiles\FILES\myODE_case\quad_sim.csv'
+    tmp2.Name = r'C:\Users\Ran_the_User\Documents\GitHub\pyFiles\FILES\myODE_case\quad_sim.csv'
 
     appDict.addDataFromFile(tmp1)
     appDict.addDataFromFile(tmp2)
 
-    print "appdict:"
-    print appDict
+    print ("appdict:")
+    print (appDict)

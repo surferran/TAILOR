@@ -104,33 +104,33 @@ def get_trimmed_DF(pd, rows, cols):
 
 if __name__=='__main__':
 
-    print " script name : "+ __name__
+    print (" script name : "+ __name__)
 
     # small data
     introDict = {"index": [1,2,3,4],
                  "stamData": ["ran", "child", 0, 3]}
     testDF = pd.DataFrame(introDict)
-    print introDict
-    print testDF
+    print (introDict)
+    print (testDF)
 
     #bigger data
     testDF = pd.read_csv('df_data_example.csv')
 
 #    print get_head(testDF)
-    print get_head(testDF, 2)
+    print (get_head(testDF, 2))
 #    print get_tail(testDF)
-    print get_tail(testDF, 2)
-    print get_only_head_and_tail(testDF, 2)
+    print (get_tail(testDF, 2))
+    print (get_only_head_and_tail(testDF, 2))
     
-    print get_columns_by_name(testDF,[ 'a', 'c'])
-    print get_rows_by_index(testDF, 3, 5)
+    print (get_columns_by_name(testDF,[ 'a', 'c']))
+    print (get_rows_by_index(testDF, 3, 5))
     
-    print get_header(testDF)
+    print (get_header(testDF))
     
     print_DataFrame_info(testDF)
     
     tmp = get_DF_statistics(testDF)
-    print tmp
+    print (tmp)
     
 #    testDF.plot()
     
