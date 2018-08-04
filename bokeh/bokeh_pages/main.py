@@ -29,7 +29,7 @@ import bk_example
 #import bokeh
 #print (bokeh.__version__)
 
-fileName = 'C:/Users/Ran_the_User/Documents/GitHub/TAILOR/bokeh/bokeh_pages/'
+fileName = './bokeh_pages/static/'
     
 def minimial_page_4_server_test(doc):
     doc.title = "**testing demo page**"
