@@ -169,7 +169,7 @@ class AppData_TreeCtrl(wx.TreeCtrl):
                 trimmedDFcols = min(6, len(list(DFdata))) # todo: put as constants from INI
                 trimmedDF = dfActions.get_trimmed_DF(DFdata, trimmedDFrows, trimmedDFcols)
                 wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
-                panelTitle = selectedItemLabel + " data table"
+                panelTitle = selectedItemLabel + " *trimmed* data table"
                 parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
 
                 headersList = list(DFdata.columns.values) # or list(DFdata)  # can tty also sorted(DFdata)

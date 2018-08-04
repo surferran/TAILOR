@@ -284,7 +284,7 @@ class AuiFrame(wx.Frame):
                               agwStyle=eval(tb_prop['tb_properties']))
 
         for ndx, btn_props in enumerate(tb_prop['buttons']):
-            key = btn_props.keys()[0]
+            key = list(btn_props.keys())[0]
             if key != 'seperator':
                 btn = btn_props[key]
                 tbar.AddSimpleTool(eval(btn['ID_string']), btn['btn_label'], eval(btn['btn_icon']), btn['btn_tooltip'])
@@ -383,7 +383,11 @@ class AuiFrame(wx.Frame):
         ''''''
         self._user_settings_file = './user_prefs/settings_Toolbars_Items.json'
         user_ToolBars = fConverters.load_JSON_file_to_Dict(self._user_settings_file)
+        # user_ToolBars = fConverters.load_JSON_file_to_Dict('./user_prefs/settings_Toolbars_Items.json')
 
+        print (user_ToolBars)
+        print (user_ToolBars['tb_1'])
+        
         tb_prop = user_ToolBars['tb_1']
         favorites_tbar = self.BuildToolBar(tb_prop)
 
@@ -978,7 +982,7 @@ class AuiFrame(wx.Frame):
         elif event.EventObject._tip_item.label == "Reload CSV":
             print ("reloading")
 #            basePath = './simOutputsData/'   
-            basePath = '../bokeh/bokeh_app/data/'
+            basePath = '../bokeh/_externals_not_used_/bokeh_app/data/'
             fileDict1 = files_handler.get_file_details(basePath + 'quad_sim.csv')            
             fileDict2 = files_handler.get_file_details(basePath + 'titanic3.csv')
             fileDict3 = files_handler.get_file_details(basePath + 'tips.csv')

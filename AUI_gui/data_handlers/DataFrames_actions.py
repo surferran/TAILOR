@@ -97,7 +97,7 @@ def get_trimmed_DF(pd, rows, cols):
     """
     cols = int(cols/2)
     numOfVars = len(list(pd))  # any more efficient method? 
-    colRange  = range(0, cols) + range(numOfVars-cols, numOfVars)
+    colRange  = list(range(0, cols)) + list(range(numOfVars-cols, numOfVars))
     trimmedDF = get_only_head_and_tail(pd.iloc[:, colRange], rows)
     return trimmedDF
 ##################################################
@@ -114,7 +114,7 @@ if __name__=='__main__':
     print (testDF)
 
     #bigger data
-    testDF = pd.read_csv('df_data_example.csv')
+    testDF = pd.read_csv('../../bokeh/_externals_not_used_/bokeh_app/data/quad_sim.csv')
 
 #    print get_head(testDF)
     print (get_head(testDF, 2))
@@ -131,6 +131,9 @@ if __name__=='__main__':
     
     tmp = get_DF_statistics(testDF)
     print (tmp)
+    
+    tmp = get_trimmed_DF(pd=testDF, rows=3, cols=2)
+    print ("trimmed df : \n" , tmp)
     
 #    testDF.plot()
     
