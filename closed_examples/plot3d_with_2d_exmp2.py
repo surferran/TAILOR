@@ -10,8 +10,12 @@ import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.collections import PolyCollection
 import random
+import matplotlib as mpl
 
 #%matplotlib wx
+
+mpl.rcParams['legend.fontsize'] = 10
+
 
 dates       = [20020514, 20020515, 20020516, 20020517, 20020520]
 highs       = [1135, 1158, 1152, 1158, 1163]
@@ -30,7 +34,7 @@ fig = matplotlib.pyplot.figure()
 ax  = fig.add_subplot(221, projection = '3d')
 
 ax.plot(dates, zaxisvalues1, lowerLimits, color = 'b',marker = "") # o
-ax.plot(dates, zaxisvalues2, upperLimits, color = 'r',marker = "X")
+ax.plot(dates, zaxisvalues2, upperLimits, color = 'r',marker = "X",label="x red markers")
 
 op=1
 if op==1:
@@ -72,7 +76,15 @@ ax.set_zlabel('z-axis')
 
 ax.set_title("'some background?' style")
 
+#ax.legend(title="title of legend")
+ax.legend()
 
+fig.suptitle("4 subplots total figure title")
+
+fig.canvas.set_window_title("fig win title")
+
+
+#fig.colorbar(pnts, shrink=0.5, aspect=10)
 """***************************************************"""
 ax  = fig.add_subplot(222) #, projection = '2d') Unknown projection '2d'
 matplotlib.pyplot.gca().patch.set_facecolor('lightgray')
