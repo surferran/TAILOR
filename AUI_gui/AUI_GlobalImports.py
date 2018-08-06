@@ -17,7 +17,7 @@ import display_handlers.gui_plots            as gui_plots
 import from_demo_agw.ZoomBar                as zB
 import from_demo_agw.XMLtreeview            as Xtr
 import from_demo_agw.DragAndDrop            as DD
-import from_demo_agw.ShapedWindows          as ShpWin
+#import from_demo_agw.ShapedWindows          as ShpWin
 
 try:
     dirName = os.path.dirname(os.path.abspath(__file__))
@@ -45,7 +45,7 @@ import specific_files.interpShell
 
 import data_handlers.formats_converters as fConverters
 
-print "wx version: "+wx.__version__
+print ("wx version: "+wx.__version__)
 
 import skimage
 

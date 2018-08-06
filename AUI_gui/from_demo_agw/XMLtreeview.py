@@ -109,7 +109,7 @@ class XMLTree(wx.TreeCtrl):
         event.Skip()
 
     def OnSize(self, event):
-        print "size event visit"
+        print ("size event visit")
         pass
 #        w,h = self.GetClientSizeTuple()
 #        self.SetDimensions(0, 0, w, h)
@@ -165,11 +165,11 @@ class XMLTree(wx.TreeCtrl):
         self.draggingItem = None
 
         if not itemDst.IsOk():
-            print "Can't drag to here..."
+            print ("Can't drag to here...")
             return
 
         if self.IsDescendant(itemDst, itemSrc):
-            print "Can't move item to its descendant"
+            print ("Can't move item to its descendant")
             return
 
         # For this simple example just take the text of the source item

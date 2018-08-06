@@ -8,14 +8,15 @@ import sys
 sys.path.append('../')  # to find above packages
 import files_handler
 
-import ShapedWindows as ShpWin
+if __name__ == '__main__':
+    import ShapedWindows as ShpWin
 
 if __name__=="__main__":
-    print "activated by 1 , as : " + __name__
+    print ("activated by 1 , as : " + __name__)
     sys.path.append('../specific_files/')  # to find above packages
     import interpShell
 else:
-    print "activated by 2 , as : " + __name__
+    print ("activated by 2 , as : " + __name__)
     sys.path.append('../specific_files/')  # to find above packages
     sys.path.append('./specific_files/')  # to find above packages
     import interpShell
@@ -24,7 +25,7 @@ else:
 def magic_getDF(theCallerSelf):
     var1 = theCallerSelf._appDataHolder.mainDict
     var2 = theCallerSelf.text3
-    print "got to magic function"
+    print ("got to magic function")
     return var1
 #----------------------------------------------------------------------
 
@@ -105,16 +106,16 @@ class OtherDropTarget(wx.DropTarget):
         return wx.DragCopy
 
     def OnUrlDrop(self):
-        print "OnUrlDrop:"
+        print ("OnUrlDrop:")
         url = self.data.GetURL()
         self.window.AppendText(url + "\n")
         return wx.DragLink
 
     def OnTextDrop(self):
-        print "OnTextDrop:"
+        print ("OnTextDrop:")
         text = self.textdo.GetText()
         # self.textCtrl.AppendText(self.textDropData.GetText() + '\n')
-        print text
+        print (text)
         self.window.WriteText(text+'\n')
         #TODO : show popup menu to categorize the text and relate action to it.
          # either store data in lists, or links book-keeping, or issues to track (as part of my notes)
@@ -127,7 +128,7 @@ class OtherDropTarget(wx.DropTarget):
         dragedFilesInfo['numOfFiles']           = 0
         dragedFilesInfo['files']                = []
 
-        print "OnFileDrop:"
+        print ("OnFileDrop:")
 
         filesNames = self.filedo.GetFilenames()
         dragedFilesInfo['numOfFiles']      = len(filesNames)
@@ -138,10 +139,10 @@ class OtherDropTarget(wx.DropTarget):
             self.window.WriteText("%d files were dragged in\n" % len(filesNames))
 
         for ndx ,name in enumerate(filesNames):
-            print name
+            print (name)
             files_handler.file_action_by_type(name, self.window.Parent._appDataHolder) #new
 
-            print self.window.Parent._appDataHolder.mainDict[0].loadedData
+            print (self.window.Parent._appDataHolder.mainDict[0].loadedData)
             # self.window.Parent._appDataHolder
 
             # self.log.WriteText("%s\n" % name)
@@ -149,10 +150,10 @@ class OtherDropTarget(wx.DropTarget):
 
             pass
 
-            print 'self.window.Parent.Parent.Parent.Parent.Label is : '
-            print self.window.Parent.Parent.Parent.Parent.Label   #'inintial wxFrame'
+            print ('self.window.Parent.Parent.Parent.Parent.Label is : ')
+            print (self.window.Parent.Parent.Parent.Parent.Label)   #'inintial wxFrame'
             # print self.window.Parent.Parent.Parent # panel
-            print self.window.Parent.Parent  # AUIFrame named 'frame'
+            print (self.window.Parent.Parent)  # AUIFrame named 'frame'
             # print self.window.Parent  # FileDropPanel
             # print self.window # TextCtrl
             # print self  # OtherDropTarget
@@ -165,11 +166,11 @@ class OtherDropTarget(wx.DropTarget):
             allSimilarFiles                 = glob.glob(full_path + "/*" + file_extension)
             dragedFileIndexInList           = allSimilarFiles.index(name)   # same meaning as startViewIndex
 
-            print fullFileName
-            print full_path
-            print file_extension
-            print allSimilarFiles
-            print dragedFileIndexInList
+            print (fullFileName)
+            print (full_path)
+            print (file_extension)
+            print (allSimilarFiles)
+            print (dragedFileIndexInList)
 
             dragedFilesInfo['files'].append({})
             dragedFilesInfo['files'][ndx]['fullName_withExt']   = name
@@ -182,7 +183,7 @@ class OtherDropTarget(wx.DropTarget):
         return wx.DragCopy
 
     def OnBMPFDrop(self):
-        print "OnBMPDrop:"
+        print ("OnBMPDrop:")
         bmp = self.bmpdo.GetBitmap()
         return wx.DragCopy
 
@@ -255,17 +256,17 @@ class FileDropPanel(wx.Panel):
         selectedString = self.text3.GetStringSelection()
         textFiled = self.text3.GetValue()  # returns the whole text field string
         if 1==2:
-            print self.text3.GetInsertionPoint()
-            print self.text3.GetNumberOfLines()
-            print self.text3.GetPosition()
-            print selectionRange
-            print selectedString
-            print textFiled
+            print (self.text3.GetInsertionPoint())
+            print (self.text3.GetNumberOfLines())
+            print (self.text3.GetPosition())
+            print (selectionRange)
+            print (selectedString)
+            print (textFiled)
         # insertionpoint
         # linelenght
         # linetext
         # getsele
-            print keyFeatures
+            print (keyFeatures)
 
         # if keyFeatures['controlDown']==False \
         #     and keyFeatures['shiftDown'] == False \
@@ -366,7 +367,7 @@ class FileDropPanel(wx.Panel):
     #------------------ ------------------ ------------------ ---------
     ''' local magic function. for connecting the consule to the outside world '''
     def getDFlist(self):
-        print "got to inner magic func"    
+        print ("got to inner magic func")
 #----------------------------------------------------------------------
 #----------------------------------------------------------------------
 

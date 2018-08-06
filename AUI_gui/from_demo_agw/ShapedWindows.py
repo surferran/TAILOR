@@ -110,7 +110,7 @@ if __name__ == '__main__':
     frame.Show(False)  # Show the frame.
     pnl     = wx.Panel(frame)
 
-    iconNames       = ["help", "smfuel","checked"]   # todo - get from os list or user json file
+    iconNames       = ["AG00185_"] #, "help", "smfuel","checked"]   # todo - get from os list or user json file
     functionsToLaunch = [addUrlToLinksList, None, None, None]
     # functionToLaunch = [addUrlToLinksList]
     # avgLoc = (600,400)
@@ -119,7 +119,7 @@ if __name__ == '__main__':
     winLocations    = [ (x+avgLoc[0],y+avgLoc[1]) for (x,y) in deltaLoc]
 
     for icon,func,loc in zip(iconNames, functionsToLaunch, winLocations):
-        iName = "bitmaps/" + icon + ".ico"
+        iName = "bitmaps/" + icon + ".gif"  #".ico"
         win = ShapedWindowByImage(pnl, imageFileName = iName, launchFunction = func, initialLocation=loc)
         win.Show(True)
 
