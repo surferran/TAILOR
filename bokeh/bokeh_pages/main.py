@@ -196,10 +196,10 @@ def make_document(doc):
         dots_fig.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
         c1 = dots_fig.circle(x, factors, size=15, fill_color="orange", line_width=3, line_color=LineColor)
         
-        tool = BoxEditTool(renderers=[c1])
+#        tool = BoxEditTool(renderers=[c1]) # ERROR:bokeh.core.validation.check:E-1014 (INCOMPATIBLE_BOX_EDIT_RENDERER): BoxEditTool renderers may only reference Rect glyph models: Circle glyph type(s) found.
         tool2 = BoxSelectTool(dimensions="width") # To make a multiple selection, press the SHIFT key. To clear the selection, press the ESC key
         
-        dots_fig.add_tools(tool) # disappears the points..
+#        dots_fig.add_tools(tool) # disappears the points..
         dots_fig.add_tools(tool2)
         dots_fig.add_tools(CrosshairTool(dimensions='height'))
         
@@ -305,8 +305,8 @@ if __name__=='__main__':
         print("main flow continue")
     #    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
         
-#        apps1 = {'/': Application(FunctionHandler(make_document))}
-        apps1 = {'/': Application(FunctionHandler(make_page_flow))}
+        apps1 = {'/': Application(FunctionHandler(make_document))}
+#        apps1 = {'/': Application(FunctionHandler(make_page_flow))}
     #    apps3 = {'/': Application(FunctionHandler(event_chart_example))}
         
         server1 = Server(apps1, port=5007)

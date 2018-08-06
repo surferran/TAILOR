@@ -24,6 +24,7 @@ body {
 	background-color: blue;
 	background-color: yellow;
 	background-color: lightgray;
+	background: "../logoScrnSht.png";
 }
 h1 {
     color: white;
