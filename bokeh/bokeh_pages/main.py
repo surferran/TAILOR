@@ -24,33 +24,48 @@ from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
 #from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
 
-import bk_example
+import sys
+
+#import bk_example
 
 #import bokeh
 #print (bokeh.__version__)
 
 
-DATA_DIR = join(dirname(__file__), 'static/')
-DATA_DIR = join(dirname(__file__), 'static')
+#DATA_DIR = join(dirname(__file__), 'static/')
+DATA_DIR = join(dirname(__file__), 'static')  # full abs path
+import os.path
+rel_DATA_DIR = os.path.relpath(DATA_DIR)
 
-#fileName = DATA_DIR +'salary_data.csv'
-fileName = join(DATA_DIR,'salary_data.csv')
-    
-def doc_add_root(doc,obj):
+fileName_csv_source = join(rel_DATA_DIR,'salary_data.csv')
+
+case_test = True
+case_test = False
+
+def my_print(str, prefix=''):
+    print("************")
+    print(prefix, str)
+    print("************")
+        
+def doc_add_root(doc, obj, title=''):
     print("doc : ", doc)
     print("doc : " + str(doc))
     print("name : ",__name__)
     print("obj : " + str(obj))
+    my_print(case_test, 'is it a test case ? : ')
     
     # called from console, or
     # called from notebook
     if __name__.startswith('bk_script') \
        or str(doc).startswith('<function curdoc'):  
         doc().add_root(obj)
+        doc().title = title
     else:
 #        if __name__=='__main__':   # and for jupyter notebook (name is  bokeh.docu..)
         doc.add_root(obj)
-    
+        doc.title = title
+
+"""**************************************************"""    
     
 def minimial_page_4_server_test(doc):
     doc.title = "**testing demo page**"
@@ -67,8 +82,8 @@ def minimial_page_4_server_test(doc):
     toggle.on_click(button_reaction)
     
     img_paths=[]
-    img_paths.append(join(DATA_DIR,'logoScrnSht.png'))
-    img_paths.append(join(DATA_DIR,'tree.png'))
+    img_paths.append(join(rel_DATA_DIR,'logoScrnSht.png'))
+    img_paths.append(join(rel_DATA_DIR,'tree.png'))
 #    img_path = './static/logoScrnSht.png'
 #    img_path = r'C:\Users\Ran_the_User\Documents\GitHub\TAILOR\bokeh\bokeh_pages\static\logoScrnSht.png'
 #    img_path = 'tree.png'
@@ -98,10 +113,12 @@ def minimial_page_4_server_test(doc):
 #        doc.add_root(toggle)
 #        doc.add_root(figImg)    
 
+"""**************************************************"""
+
 def make_document(doc):
     doc.title = "Hello, world!"
     
-    df = pd.read_csv(fileName) # return dataframe
+    df = pd.read_csv(fileName_csv_source) # return dataframe
     if False:
         df = df.set_index('date')
     ''' make a copy of df. therefor changing the source will not affect df.
@@ -117,20 +134,23 @@ def make_document(doc):
     data_table = DataTable(source=source, columns=columns, width=800) # ,row_headers=None)
     table = widgetbox(data_table, width=880)
     
-    def slider_table_update(attr, old, new):
+#    def slider_table_update(attr, old, new):
+#        print(attr)
+#        print(old)
+#        print(new)
+    def slider_table_update():
         print ("slider update")
-        print(attr)
-        print(old)
-        print(new)
-        current = df[df['salary'] <= slider.value].dropna()  # df ## 
+#        adjustment by https://groups.google.com/a/continuum.io/forum/#!topic/bokeh/fPAoHTyMcuQ
+        current = df[df['salary'] <= slider.value].dropna() # df ## 
         source.data = {
-            'name'             : current.name,
-            'salary'           : current.salary,
-            'years_experience' : current.years_experience
+            'name'             : list(current.name),
+            'salary'           : list(current.salary),
+            'years_experience' : list(current.years_experience)
         }
         return None
     slider = Slider(title="values range", start=0, end=100000, value=21000, step=1, width=800)
-    slider.on_change('value', lambda attr, old, new: slider_table_update(attr, old, new))
+#    slider.on_change('value', lambda attr, old, new: slider_table_update(attr, old, new))
+    slider.on_change('value', lambda attr, old, new: slider_table_update())
     
 #    fig1 = figure(title='Line plot!') #, sizing_mode='scale_width')
 #    fig1.line(x=[1, 2, 3], y=[1, 4, 9])
@@ -145,9 +165,10 @@ def make_document(doc):
 
 #    https://stackoverflow.com/questions/34646270/how-do-i-work-with-images-in-bokeh-python    
 #   img_path = 'https://bokeh.pydata.org/en/latest/_static/images/logo.png'
-    img_path = join(DATA_DIR,'logoScrnSht.png')
+    img_path = join(rel_DATA_DIR,'logoScrnSht.png')
 #    img_path = r'C:\Users\Ran_the_User\Documents\GitHub\TAILOR\bokeh\bokeh_pages\static\logoScrnSht.png'
-    
+    my_print(img_path)
+
     x_range = (-20,10) # could be anything - e.g.(0,1)
     y_range = (20,30)
     factor = 1.2
@@ -232,11 +253,7 @@ def make_document(doc):
         dots_fig.segment(0, factors, x, factors, line_width=2, line_color=LineColor)
         c1 = dots_fig.circle(x, factors, size=15, fill_color="orange", line_width=3, line_color=LineColor)
         
-<<<<<<< HEAD
-#        tool = BoxEditTool(renderers=[c1])
-=======
 #        tool = BoxEditTool(renderers=[c1]) # ERROR:bokeh.core.validation.check:E-1014 (INCOMPATIBLE_BOX_EDIT_RENDERER): BoxEditTool renderers may only reference Rect glyph models: Circle glyph type(s) found.
->>>>>>> 9abaa8691b56df7c0b9fe4dd2ca1ddf503b38305
         tool2 = BoxSelectTool(dimensions="width") # To make a multiple selection, press the SHIFT key. To clear the selection, press the ESC key
         
 #        dots_fig.add_tools(tool) # disappears the points..
@@ -268,24 +285,24 @@ def make_document(doc):
     
     tabs = Tabs(tabs=[ tab1, tab2 ])
     
-    if __name__!='__main__':    
-        print("doc : ", str(doc))
-        print("name : ",__name__)
-        doc().add_root(tabs)
-    else:
-        print("doc : ", str(doc))
-        doc.add_root(tabs)
+    doc_add_root(doc, tabs)
+#    if __name__!='__main__':    
+#        print("doc : ", str(doc))
+#        print("name : ",__name__)
+#        doc().add_root(tabs)
+#    else:
+#        print("doc : ", str(doc))
+#        doc.add_root(tabs)
 
-#    doc.add_root(event_chart_example())
-    
     toggle_callback.args['a']=slider
     toggle_callback.args['b']=toggle
     toggle_callback.args['c']=checkbox
     toggle_callback.args['d']=radio
     
-#    slider_table_update()
+    slider_table_update()
+
+"""**************************************************"""
     
-#def make_page_flow(curdoc):
 def make_page_flow(doc):
     
 #    return make_document(doc)
@@ -293,17 +310,22 @@ def make_page_flow(doc):
 #        df = pd.read_csv('salary_data.csv')
 #    else:
 #    #    df = pd.read_csv('./bokeh_pages/salary_data.csv')
-    df = pd.read_csv(fileName)
+    df = pd.read_csv(fileName_csv_source)
 #    
     source = ColumnDataSource(data=dict())
 
     def update():
         print ("slider update")
-        current = df[df['salary'] <= slider.value].dropna()  # df ## 
+#        current = df[df['salary'] <= slider.value].dropna()  # df ## 
+#        adjustment by https://groups.google.com/a/continuum.io/forum/#!topic/bokeh/fPAoHTyMcuQ
+        current = df[df['salary'] <= slider.value].dropna() # df ## 
+#        print (list(current.name))
+#        print (type(current.salary)) # <class 'pandas.core.series.Series'>
+#        print (type(current.years_experience))
         source.data = {
-            'name'             : current.name,
-            'salary'           : current.salary,
-            'years_experience' : current.years_experience,
+            'name'             : list(current.name),  
+            'salary'           : list(current.salary),
+            'years_experience' : list(current.years_experience),
         }
     
     slider = Slider(title="values range", start=0, end=100000, value=20000, step=1)
@@ -326,28 +348,23 @@ def make_page_flow(doc):
     
     controls = widgetbox(slider, button)
     table = widgetbox(data_table)
-    if __name__!='__main__':    
-        print("doc : ", str(doc))
-        print("name : ",__name__)
-        doc().add_root(row(controls, table))
-        doc().title = "work flow page, from caller"
-    elif __name__=='__main__':   
-        print("doc : ", str(doc)) 
-        doc.add_root(row(controls, table))
-        doc.title = "work flow page, from main"
     
-#    if __name__=='__main__':
+    total_row = row(controls, table)
+    
+    doc_add_root(doc, total_row, title = 'work flow page')
+#    if __name__!='__main__':    
+#        print("doc : ", str(doc))
+#        print("name : ",__name__)
+#        doc().add_root(row(controls, table))
+#        doc().title = "work flow page, from caller"
+#    elif __name__=='__main__':   
+#        print("doc : ", str(doc)) 
+#        doc.add_root(row(controls, table))
+#        doc.title = "work flow page, from main"
+    
     update()
 
-case_test = True
-#case_test = False
-
-def my_print(str, prefix=''):
-    print("************")
-    print(prefix, str)
-    print("************")
-    
-my_print(case_test, 'is it a test case ? : ')
+"""**************************************************"""
 
 if __name__=='__main__':
 #    case_test = False
@@ -355,6 +372,7 @@ if __name__=='__main__':
 #    print("doc : ", doc)
     print("name : ",__name__)
     my_print ("main caller")
+
     if case_test:
         app = {'/': Application(FunctionHandler(minimial_page_4_server_test))}
         server1 = Server(app, port=5001)
@@ -366,20 +384,18 @@ if __name__=='__main__':
     #    https://stackoverflow.com/questions/43057328/change-colour-of-bokeh-buttons#
         
         apps1 = {'/': Application(FunctionHandler(make_document))}
-#        apps1 = {'/': Application(FunctionHandler(make_page_flow))}
-    #    apps3 = {'/': Application(FunctionHandler(event_chart_example))}
+        apps2 = {'/': Application(FunctionHandler(make_page_flow))}
         
-        server1 = Server(apps1, port=5008)
+        server1 = Server(apps1, port=5007)
         server1.start()
-    #    server2 = Server(apps2, port=5008)
-    #    server2.start()
+        server2 = Server(apps2, port=5008)
+        server2.start()
     #    server3 = Server(apps3, port=5009)
     #    server3.start()
-    #    make_document()
         
         server1.show('/')
     #    print(server1.port)
-    #    server2.show('/')
+        server2.show('/')
     #    server3.show('/')
         
     #    # then http://localhost:5008/
@@ -389,14 +405,15 @@ if __name__=='__main__':
     #    section='special stop'
         if section=='special stop':
             server1.stop()
-#            server2.stop()
+            server2.stop()
     #        server3.stop()
     
 else:
-#    print("doc : "+ str(doc))
     print(" caller is ", __name__)
     if case_test:
         minimial_page_4_server_test(curdoc)
     else:
-#        make_page_flow(curdoc)  # default is port 5006
-        make_document(curdoc)
+        # the pages are combined to the same page 
+        make_document(curdoc)   #
+        make_page_flow(curdoc)  # default is port 5006
+        

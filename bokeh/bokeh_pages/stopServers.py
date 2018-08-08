@@ -7,5 +7,5 @@ Created on Wed Jul 18 19:16:46 2018
 
 
 server1.stop()
-#server2.stop()
+server2.stop()
 #server3.stop()
