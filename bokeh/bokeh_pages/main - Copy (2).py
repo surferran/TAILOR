@@ -36,22 +36,6 @@ DATA_DIR = join(dirname(__file__), 'static')
 #fileName = DATA_DIR +'salary_data.csv'
 fileName = join(DATA_DIR,'salary_data.csv')
     
-def doc_add_root(doc,obj):
-    print("doc : ", doc)
-    print("doc : " + str(doc))
-    print("name : ",__name__)
-    print("obj : " + str(obj))
-    
-    # called from console, or
-    # called from notebook
-    if __name__.startswith('bk_script') \
-       or str(doc).startswith('<function curdoc'):  
-        doc().add_root(obj)
-    else:
-#        if __name__=='__main__':   # and for jupyter notebook (name is  bokeh.docu..)
-        doc.add_root(obj)
-    
-    
 def minimial_page_4_server_test(doc):
     doc.title = "**testing demo page**"
     
@@ -83,20 +67,16 @@ def minimial_page_4_server_test(doc):
     factor=2
     figImg.image_url(url=[img_paths[1]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor) #, anchor="bottom_left") default it left-up
     
-    
-    doc_add_root(doc, toggle)
-    doc_add_root(doc, figImg)
-    
-#    if __name__=='__main__':   # = only for jupyter notebook      
-#        print("doc : ", str(doc))
-#        print("name : ",__name__)
-#        doc().add_root(toggle)
-#        doc().add_root(figImg)    
-#    else:
-#        print("doc : ", str(doc))
-#        print("name : ",__name__)
-#        doc.add_root(toggle)
-#        doc.add_root(figImg)    
+    if __name__=='__main__':   # = only for jupyter notebook  
+        print("doc : ", doc)
+        print("name : ",__name__)
+        doc().add_root(toggle)
+        doc().add_root(figImg)    
+    else:
+        print("doc : ", doc)
+        print("name : ",__name__)
+        doc.add_root(toggle)
+        doc.add_root(figImg)    
 
 def make_document(doc):
     doc.title = "Hello, world!"
@@ -265,11 +245,10 @@ def make_document(doc):
     tabs = Tabs(tabs=[ tab1, tab2 ])
     
     if __name__!='__main__':    
-        print("doc : ", str(doc))
+        print("doc : ", doc)
         print("name : ",__name__)
         doc().add_root(tabs)
     else:
-        print("doc : ", str(doc))
         doc.add_root(tabs)
 
 #    doc.add_root(event_chart_example())
@@ -323,12 +302,11 @@ def make_page_flow(doc):
     controls = widgetbox(slider, button)
     table = widgetbox(data_table)
     if __name__!='__main__':    
-        print("doc : ", str(doc))
+        print("doc : ", doc)
         print("name : ",__name__)
         doc().add_root(row(controls, table))
         doc().title = "work flow page, from caller"
-    elif __name__=='__main__':   
-        print("doc : ", str(doc)) 
+    elif __name__=='__main__':    
         doc.add_root(row(controls, table))
         doc.title = "work flow page, from main"
     
@@ -336,7 +314,7 @@ def make_page_flow(doc):
     update()
 
 case_test = True
-#case_test = False
+case_test = False
 
 def my_print(str, prefix=''):
     print("************")
@@ -347,8 +325,7 @@ my_print(case_test, 'is it a test case ? : ')
 
 if __name__=='__main__':
 #    case_test = False
-#    print("doc : "+ str(doc))
-#    print("doc : ", doc)
+    print("doc : ", doc)
     print("name : ",__name__)
     my_print ("main caller")
     if case_test:
@@ -389,7 +366,6 @@ if __name__=='__main__':
     #        server3.stop()
     
 else:
-#    print("doc : "+ str(doc))
     print(" caller is ", __name__)
     if case_test:
         minimial_page_4_server_test(curdoc)
