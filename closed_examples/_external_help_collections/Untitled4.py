@@ -53,7 +53,10 @@ plt.show()
 
 ####################
 
-mport numpy as np
+# from 
+# https://math.stackexchange.com/questions/2004800/math-for-simple-3d-coordinate-rotation-python
+
+import numpy as np
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
