@@ -27,4 +27,4 @@ def get_source_to_local(sourcePath, local):
 """ ****************************************************************"""
 
 if __name__=='__main__':
-    print cmn.local_utils.get_dict_from_json_file('user_settings.json')
+    print (cmn.local_utils.get_dict_from_json_file('user_settings.json'))

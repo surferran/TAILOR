@@ -41,4 +41,4 @@ if __name__ == '__main__':
     exe = 'launch_server.bat'
     cmn.local_utils.os.system(exe)
     
-    print "END of MAIN run"
+    print( "END of MAIN run")

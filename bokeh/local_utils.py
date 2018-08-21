@@ -24,5 +24,5 @@ import os
 """ ****************************************************************"""
 
 if __name__=='__main__':
-    print get_dict_from_json_file('user_settings.json')
-    print copy_source_to_taget_paths('a','s')
+    print (get_dict_from_json_file('user_settings.json'))
+    print (copy_source_to_taget_paths('a','s'))
