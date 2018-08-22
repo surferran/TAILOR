@@ -13,7 +13,8 @@ from bokeh.layouts import row, widgetbox, layout, column
 from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, CrosshairTool  # BoxEditTool, 
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
                                     NumberFormatter, CheckboxGroup, RadioGroup, \
-                                    Toggle, Panel, Tabs, CheckboxButtonGroup
+                                    Toggle, Panel, Tabs, CheckboxButtonGroup, \
+                                    Paragraph
 from bokeh.io import curdoc , push_notebook, show, output_notebook
 
 from bokeh.server.server import Server
@@ -21,6 +22,9 @@ from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
 
+import json
+
+from functools import partial # by https://stackoverflow.com/questions/41926478/python-bokeh-send-additional-parameters-to-widget-event-handler
 
 DATA_PATH_NAME = 'static'
 USER_FILE_NAME = 'user_definitions.json'
@@ -32,6 +36,21 @@ rel_User_fileName = join(rel_DATA_DIR, USER_FILE_NAME)
 
 case_test = True
 case_test = False
+
+default_text =  """
+                    this is an initialized text widget
+                """
+default_abs_script_path = join(dirname(__file__))
+
+"""**************************************************"""    
+    
+def load_JSON_file_to_Dict(fileName):
+    """
+    :param fileName: the json file to load
+    :return: dictionary object
+    """
+    json_dict = json.load(open(fileName))
+    return json_dict
 
 """**************************************************"""    
     
@@ -61,46 +80,94 @@ def doc_add_root(doc, obj, title=''):
     
 def minimial_page_4_server_test(doc):
     doc.title = "**testing demo page**"
+
+    user_dict = load_JSON_file_to_Dict(rel_User_fileName)
     
+    p = Paragraph(text="""
+                    this is an initialized text widget
+                    """,
+                    width=200, height=100)
+    text_box = widgetbox(p)
+
     if __name__=='__main__':    
         def button_reaction():
-            print("stopping server (self kill. restart)")
+            print("stopping test-server (self kill. restart)")
+            p.text = "stopping server"
             server1.stop()
-        toggle   = Button(label='kill server', button_type='success') 
+            p.text = "stopping server .. failed"
+        toggle   = Button(label='kill test-server', button_type='success') 
     else:
         def button_reaction():
             print("pressed button")
-        toggle   = Button(label='smile:)', button_type='success')  # Options: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
+            p.text = "json content is :\n "+ str(user_dict)
+        toggle   = Button(label='smile:) with test', button_type='success')  # Options: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
     toggle.on_click(button_reaction)
     
     img_paths=[]
     img_paths.append(join(rel_DATA_DIR,'logoScrnSht.png'))
     img_paths.append(join(rel_DATA_DIR,'tree.png'))
-    x_range = (-20,10) # could be anything - e.g.(0,1)
+    x_range = (-20,10)
     y_range = (20,30)
     factor = 1.2
-    figImg = figure(x_range=x_range, y_range=y_range, width=500, height=400)
+    figImg = figure(x_range=x_range, y_range=y_range, width=500, height=400, active_drag='pan', active_scroll='wheel_zoom')
     figImg.image_url(url=[img_paths[0]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor, anchor="bottom_left") 
     factor=2
     figImg.image_url(url=[img_paths[1]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor) #, anchor="bottom_left") default it left-up
-        
+
     doc_add_root(doc, toggle)
     doc_add_root(doc, figImg)
+    doc_add_root(doc, text_box)
 
 """**************************************************"""
 
 def make_page_flow(doc):
+    """
+    create the flow diagram by json file definitions
+    """    
+    user_dict = load_JSON_file_to_Dict(rel_User_fileName)
     
-    def on_button_change():
-        print("visiting on button change")
-    button = Button(label="Phase #1 ", button_type="success") # button_type: ‘default’, ‘primary’, ‘success’, ‘warning’, ‘danger’, ‘link’
-    button.on_click(on_button_change)
-    
-    controls = widgetbox(button) # text field
+    text_P = Paragraph(text=default_text,
+                    width=600, height=100)
+    # display_original_text = True
+
+    def on_button_change(btn_info):
+        print("pressed button change")
+        # tmp = display_original_text
+        # if display_original_text:
+        #     text_P.text = default_text            
+        # else:
+        text_P.text = "changed text to json content : \n "+str(user_dict)+"\n by "+str(btn_info)  # how to know caller name/id?
+
+        # execute button_data['relevant script']
+        # display_original_text = not (tmp)
+
+
+    flow_items=[]
+    for item in user_dict['blocks']:
+        if isinstance(item, type(dict())):
+            button = Button(label=item['label'], button_type="success")
+            button.on_click(partial(on_button_change, btn_info=item))
+            control = widgetbox(button) 
+            # doc_add_root(doc, control)
+            flow_items.append(control)
+        elif isinstance(item, type(list())):
+            btns = []
+            for btn in item:
+                button = Button(label=btn['label'], button_type="success")
+                button.on_click(partial(on_button_change, btn_info=btn))
+                btns.append(widgetbox(button))
+            control = row(btns) 
+            # doc_add_root(doc, control)
+            flow_items.append(control)
+    flow_box = column(flow_items)
+
+    text_box = widgetbox(text_P)
         
-    total_row = row(controls)
+    total_row = row(flow_box, text_box)
     
     doc_add_root(doc, total_row, title = 'work flow page')
+
+    # doc_add_root(doc, text_box, title = 'work flow page')
 
 """**************************************************"""
 
