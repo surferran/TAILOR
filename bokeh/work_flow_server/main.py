@@ -14,7 +14,7 @@ from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, CrosshairToo
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
                                     NumberFormatter, CheckboxGroup, RadioGroup, \
                                     Toggle, Panel, Tabs, CheckboxButtonGroup, \
-                                    Paragraph
+                                    Paragraph, MultiSelect, RangeSlider, TextInput
 from bokeh.io import curdoc , push_notebook, show, output_notebook
 
 from bokeh.server.server import Server
@@ -114,9 +114,32 @@ def minimial_page_4_server_test(doc):
     factor=2
     figImg.image_url(url=[img_paths[1]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor) #, anchor="bottom_left") default it left-up
 
+
+    multi_select = MultiSelect(title="Option:", value=["foo", "quux"], size=7,
+                       options=[("foo", "Foo"), ("bar", "BAR"), ("baz", "bAz"), ("quux", "quux")])
+    def mSlct_update(attrname, old, new):
+        myString = ''
+        for i in multi_select.value:
+            myString += '\n' + i
+        myString+='\n'+ str(range_slider.value[0])
+        myString+='\n'+ str(range_slider.value[1])
+        myString+='\n'+ text_input_as_filter.value
+        print("\n\n selected:\n",myString)
+        # myText.text = myString
+    multi_select.on_change('value', mSlct_update)
+    
+    range_slider = RangeSlider(start=0, end=10, value=(1,9), step=.1, title="Stuff")
+    range_slider.on_change('value', mSlct_update)
+    
+    text_input_as_filter = TextInput(value="default", title="Label:") # no workable callback option 
+
+
     doc_add_root(doc, toggle)
     doc_add_root(doc, figImg)
     doc_add_root(doc, text_box)
+    doc_add_root(doc, multi_select)
+    doc_add_root(doc, range_slider)
+    doc_add_root(doc, text_input_as_filter)
 
 """**************************************************"""
 
