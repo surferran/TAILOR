@@ -5,7 +5,7 @@ dated : 21/08/18
 """
  
 from os.path import dirname, join, relpath
-import sys
+import sys, os, json
 
 import pandas as pd
 
@@ -22,9 +22,9 @@ from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
 
-import json
-
 from functools import partial # by https://stackoverflow.com/questions/41926478/python-bokeh-send-additional-parameters-to-widget-event-handler
+
+import step_1_action
 
 DATA_PATH_NAME = 'static'
 USER_FILE_NAME = 'user_definitions.json'
@@ -161,9 +161,18 @@ def make_page_flow(doc):
         # else:
         text_P.text = "changed text to json content : \n "+str(user_dict)+"\n by "+str(btn_info)  # how to know caller name/id?
 
-        # execute button_data['relevant script']
-        # display_original_text = not (tmp)
+        desired_script = btn_info['relevant script']
 
+        # app_path = 'C:/ProgramData/Microsoft/Windows/Start Menu/Programs'
+        # os.system(app_path + "/notepad++.exe") # as test
+        
+        if desired_script=='step_1_action':
+            step_1_action.script_main()
+        elif desired_script=='step_2_action':
+            pass
+        # print('desired_script: '+desired_script)
+        # __import__(desired_script)  # ref by https://stackoverflow.com/questions/301134/dynamic-module-import-in-python
+        # eval(desired_script).script_main()
 
     flow_items=[]
     for item in user_dict['blocks']:

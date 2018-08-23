@@ -2,10 +2,10 @@
 "data path":".",
 "blocks": [
         {"label":"step 1",
-         "relevant script":"step_1_action.py"},
+         "relevant script":"step_1_action"},
         [
             {"label":"step 2.1",
-             "relevant script":"step_2_1_action.py"},
+             "relevant script":"step_2_1_action_py"},
             {"label":"step 2.2",
              "relevant script":"step_2_2_action.py"}
         ],
