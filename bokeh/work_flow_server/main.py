@@ -22,6 +22,9 @@ from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
 
+from bokeh.io.state import curstate
+from bokeh.resources import Resources
+
 from functools import partial # by https://stackoverflow.com/questions/41926478/python-bokeh-send-additional-parameters-to-widget-event-handler
 
 import step_1_action
@@ -110,11 +113,11 @@ def minimial_page_4_server_test(doc):
     y_range = (20,30)
     factor = 1.2
     figImg = figure(x_range=x_range, y_range=y_range, width=500, height=400, active_drag='pan', active_scroll='wheel_zoom')
+    figImg.toolbar.logo=None
     figImg.image_url(url=[img_paths[0]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor, anchor="bottom_left") 
     factor=2
     figImg.image_url(url=[img_paths[1]], x=x_range[0]/factor, y=(y_range[0]+y_range[1])/2, w=(x_range[1]-x_range[0])/factor, h=(y_range[1]-y_range[0])/factor) #, anchor="bottom_left") default it left-up
-
-
+    
     multi_select = MultiSelect(title="Option:", value=["foo", "quux"], size=7,
                        options=[("foo", "Foo"), ("bar", "BAR"), ("baz", "bAz"), ("quux", "quux")])
     def mSlct_update(attrname, old, new):
@@ -142,6 +145,18 @@ def minimial_page_4_server_test(doc):
     doc_add_root(doc, text_input_as_filter)
 
 """**************************************************"""
+
+
+class MyResources(Resources):
+    @property
+    def css_raw(self):
+        return super().css_raw + [
+            """.bk-bs-nav {
+                background-color: red;
+            }"""
+        ]
+
+
 
 def make_page_flow(doc):
     """
@@ -180,7 +195,6 @@ def make_page_flow(doc):
             button = Button(label=item['label'], button_type="success")
             button.on_click(partial(on_button_change, btn_info=item))
             control = widgetbox(button) 
-            # doc_add_root(doc, control)
             flow_items.append(control)
         elif isinstance(item, type(list())):
             btns = []
@@ -189,7 +203,6 @@ def make_page_flow(doc):
                 button.on_click(partial(on_button_change, btn_info=btn))
                 btns.append(widgetbox(button))
             control = row(btns) 
-            # doc_add_root(doc, control)
             flow_items.append(control)
     flow_box = column(flow_items)
 
@@ -197,9 +210,20 @@ def make_page_flow(doc):
         
     total_row = row(flow_box, text_box)
     
-    doc_add_root(doc, total_row, title = 'work flow page')
+    tab1 = Panel(child=total_row, title="flow blocks")
 
-    # doc_add_root(doc, text_box, title = 'work flow page')
+    ''''''
+    
+    text_input_field = TextInput(value="just default text", title="Label:") # no workable callback option 
+    tab2 = Panel(child=text_input_field, title="user parameters to/from file", closable=False)
+    
+    tabs = Tabs(tabs=[ tab1, tab2 ])
+    ''''''
+    
+    # curstate().file['resources'] = MyResources(mode='cdn')
+
+    #doc_add_root(doc, total_row, title = 'work flow page')
+    doc_add_root(doc, tabs, title = 'work flow page')
 
 """**************************************************"""
 
