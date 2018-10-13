@@ -24,8 +24,10 @@ body {
 	background-color: blue;
 	background-color: yellow;
 	background-color: lightgray;
-	background-color: #cccccc;
-	background-image:url("../logoScrnSht.png")
+	background-color: #cccccc;/* Used if the image is unavailable */
+    background-image: linear-gradient(blue, lightgray);
+	/*file:///C:/Users/RAN/Downloads/CSS%20background-image%20property.htm */
+	/*background-image: url("static/logoScrnSht.png"), url("map_park.png"),url("../static/logoScrnSht.png");*/
 }
 h1 {
     color: white;

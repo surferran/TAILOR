@@ -147,16 +147,16 @@ def minimial_page_4_server_test(doc):
 """**************************************************"""
 
 
-class MyResources(Resources):
-    @property
-    def css_raw(self):
-        return super().css_raw + [
-            """.bk-bs-nav {
-                background-color: red;
-            }"""
-        ]
-
-
+# class MyResources(Resources):
+#     @property
+#     def css_raw(self):
+#         return super().css_raw + [
+#             """
+#             body {
+#                 background-image: linear-gradient(red, yellow);
+#             }
+#             """
+#         ]
 
 def make_page_flow(doc):
     """
@@ -220,7 +220,11 @@ def make_page_flow(doc):
     tabs = Tabs(tabs=[ tab1, tab2 ])
     ''''''
     
+    # print("setting resources as mode=cdn..")
     # curstate().file['resources'] = MyResources(mode='cdn')
+    # print("setting resources as mode=relative..")
+    # # curstate().file['resources'] = MyResources(mode='relative')
+    # print("..set resources ")
 
     #doc_add_root(doc, total_row, title = 'work flow page')
     doc_add_root(doc, tabs, title = 'work flow page')
