@@ -36,8 +36,8 @@ class myAppData(dict):
         self.testField      = 'c'
         self.lastFileID     = -1
         if __debug__:
-            print ("initialized appDB")
-            print (self)
+             print ("just initialized appDB (and hopefully cleared some memory")
+            # print (self)
 
     def incFileID(self):
         self.lastFileID += 1
