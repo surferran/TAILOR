@@ -20,6 +20,8 @@ def print_errors(given_err,msg):
 
 def get_file_details(full_file_name):
     fileNoExt,  file_extension = os.path.splitext(full_file_name) #[1]  # [1][1:]  get only the text of the extension, without the dot.  #.lower() to look on common grounds
+    print("details:",fileNoExt)
+    print("details:", file_extension)
     fileDetails = {}
     fileDetails['originalGivenName'] = full_file_name
     fileDetails['absPath']           = os.path.dirname(os.path.abspath(fileNoExt))        # 
@@ -34,6 +36,83 @@ def get_file_details(full_file_name):
     
     return fileDetails
 
+def list_files_in_path_TRIAL(base_path='.', include_sub_dirs=True, filter='*'):
+    """
+    :param base_path: default is current run? directory
+    :param include_sub_dirs: : default is to include
+    :param filter: default is to show all files
+    default is getting list og all files from base path to the inner one.
+    :return: list of string :
+                file name , full path, fileinfo?, modify_date?
+
+    by
+     https://stackoverflow.com/questions/2225564/get-a-filtered-list-of-files-in-a-directory
+     or
+     https://www.quora.com/Whats-the-easiest-way-to-recursively-get-a-list-of-all-the-files-in-a-directory-tree-in-Python
+    """
+    print("list_file_in_path: ", base_path)
+
+    import glob
+    ret = glob.glob('*.csv')
+    glob.glob('*.*', recursive=True)
+    glob.glob('*')
+
+    import re, os
+    files = [f for f in os.listdir('.') if re.match(r'[0-9]+.*\.jpg', f)]
+
+    import os
+    os.path.abspath(os.path.curdir)
+    os.listdir('.')
+    relevant_path = "."
+    included_extensions = ['jpg', 'csv', 'bmp', 'png', 'py']
+    file_names = [fn for fn in os.listdir(relevant_path)
+                  if any(fn.endswith(ext) for ext in included_extensions)]
+
+    import os
+    root = "."
+    pattern = "*"
+    alist_filter = ['jpg', 'bmp', 'png', 'py']
+    path = os.path.join(root, "./")
+    ret = os.walk('.')
+    for item in ret:
+        print(item)
+    # for item in d:
+    #     print(item)
+    # for item in f:
+    #     print(item)
+    for r, d, f in os.walk(path):
+        for file in f:
+            if file[-3:] in alist_filter and pattern in file:
+                print
+                os.path.join(root, file)
+
+    # find files in all path and sub paths
+    for root, dirs, files in os.walk("."):
+        for file in files:
+            if file.endswith(".py"):
+                print(os.path.join(root, file))
+
+    return ret
+
+
+def list_files_in_path(base_path='.', include_sub_dirs=True, filter=''):
+    """
+
+    :param base_path:
+    :param include_sub_dirs:
+    :param filter:
+    :return:
+    """
+
+    # find files in all path and sub paths
+    ret = []
+    for root, dirs, files in os.walk(base_path):
+        for file in files:
+            if file.endswith(filter):
+                ret.append((root, file, os.path.join(root, file)))
+                print(os.path.join(root, file))
+
+    return ret
 
 def file_action_by_type(full_file_name, parentAppData):       # todo: act on file ? already from here and not the calling function?
     fileDict = get_file_details(full_file_name)
@@ -57,6 +136,10 @@ def file_action_by_type(full_file_name, parentAppData):       # todo: act on fil
             # show_table_data_on_table_view
             print ("csv data file is given")
             load_CSV_to_appData(fileDict, parentAppData)
+
+        elif fileDict['extension'] == '.xls':
+            print("xls data file is given")
+            load_XLS_to_appData(fileDict, parentAppData)
 
         elif fileDict['extension'] == '.xml':
             # open file in new tree viewer
@@ -126,10 +209,17 @@ def load_CSV_to_dict(file):
     return dict_list
 
 def load_CSV_to_dataframe(file, headerVar = True):
+    # todo: add check for udf16 instead 8
     if (headerVar == False):
         df = pd.read_csv(file, sep=',', header=None)#, usecols=[2])   #update parameters. also can check built-in for header text or not ? notify as recomndation for user approval.
     else:
         df = pd.read_csv(file, sep=',')
+    if __debug__==True:
+        print (df.values)
+    return df
+
+def load_XLS_to_dataframe(file):
+    df = pd.read_excel(file)
     if __debug__==True:
         print (df.values)
     return df
@@ -153,18 +243,31 @@ def load_CSV_to_appData(file_details, appDataBase, headerVar = True):
     # csv_dict = load_CSV_to_dict(full_file_name) 
     csv_df   = load_CSV_to_dataframe(file_details['originalGivenName'], headerVar)
     print (csv_df)
-    print ("available DataFrame actions are: ")
-    print (dir(pd.DataFrame))
-    print (appDataBase)
+    if __debug__ and False:
+	    print ("available DataFrame actions are: ")
+    	print (dir(pd.DataFrame))
+    	print (appDataBase)
     # add_dict_to_appData(csv_dict, appDataBase)
     add_df_to_appData(file_details, csv_df, appDataBase)
+    if __debug__:
+        print("appDataBase", appDataBase.mainDict)
+
+    if __debug__==True:
+        print ("data from csv file was loaded and added to appdata")
+
+def load_XLS_to_appData(file_details, appDataBase):
+    xls_df   = load_XLS_to_dataframe(file_details['originalGivenName'])
+    if __debug__==True:
+        print (xls_df)
+    add_df_to_appData(file_details, xls_df, appDataBase)
 
     if __debug__==True:
         print ("data from csv file was loaded and added to appdata")
 
 if __name__ == '__main__':
-    file_action_by_type('..\pyGUI\perspectives.txt',None)
-    load_CSV_to_dict('quad_sim.csv')
+    # file_action_by_type('..\pyGUI\perspectives.txt', None)
+    # load_CSV_to_dict('quad_sim.csv')
+
     # file_action_by_type('C:\Users\Ran_the_User\Documents\GitHub\pyFiles\FILES\pyGUI\perspectives.txt')
 #    '''
 #    print (fileNoExt)
@@ -192,3 +295,8 @@ if __name__ == '__main__':
     # sort_file_action_by_type('JsonControlPanel.json')
     # sort_file_action_by_type('AUI_MAIN.py')
     # sort_file_action_by_type('perspectives.txt')
+
+    ret = list_files_in_path(filter='.py')
+    print (ret)
+    col1 = [itm[0] for itm in ret]
+    print(col1)

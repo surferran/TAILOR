@@ -1,0 +1,58 @@
+.bk-root .bk-bs-btn-success {
+color: #FDFEFE;
+background-color: #3e218c;
+border-color: #21618C;
+font-size : 20px;
+}
+.bk-root .bk-bs-btn-success:focus {
+color: #FDFEFE;
+background-color: #218c36;
+border-color: #21618C;
+}
+.bk-root .bk-bs-btn-success:active {
+color: #FDFEFE;
+background-color: #21618C;
+border-color: #21618C;
+}
+.bk-root .bk-bs-btn-success:hover {
+color: #FDFEFE;
+background-color: #5DADE2;
+border-color: #5DADE2;
+}
+.slick-header-column {
+            background-color: lightblue !important;
+            background-image: none !important;
+			font-size : 20px;
+}
+.slick-cell {
+     background-color: #FFB;
+	 background-color: #afB;
+	 font-size : 10px;
+	! height : 5px;
+}
+.slick-row.active .slick-cell {
+     background-color: #FFB;
+	 background-color: #F9B;
+	 font-size : 15px;
+}
+!.slick-row {
+!     background-color: #FFB;
+!	 background-color: #0aB;
+!}
+body {
+    background-color: lightblue;
+	background-color: blue;
+	background-color: yellow;
+	background-color: lightgray;
+	background-color: #cccccc;
+	background-image:url("../logoScrnSht.png")
+}
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    font-family: verdana;
+    font-size: 20px;
+}

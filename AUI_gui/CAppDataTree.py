@@ -96,7 +96,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             self.AppendItem(sub_item, str(item.fileID), 1)
             self.AppendItem(sub_item, item.dataTimeStamp, 1)
             ''''''
-            self.AppendItem(sub_item, str(item.loadedData.shape), 1)
+            itemStr = "rws:"+str(item.loadedData.shape[0])+",cls:"+str(item.loadedData.shape[1])
+            self.AppendItem(sub_item, itemStr, 1)
             ''''''
             # tree.SetItemData(sub_item, item)  # will create copy also of the data
             self.SetItemData(sub_item, item.fileID)
@@ -157,20 +158,39 @@ class AppData_TreeCtrl(wx.TreeCtrl):
             print ('appDataRelFileID gt -1')
             #todo  if self.Parent.Parent. is valid only when tree is not docked.
             # otherwise relate to other parent
-            if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
-                parentWindowCtrl = self.Parent.Parent
-                DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
+
+            '''
+            floating:
+            self = 'AppData_TreeCtrl'
+            paretnt= 'AuiFloatingFrame'
+            parent.paarent = 'AuiFrame'
+            
+            docked:
+            self = 'AppData_TreeCtrl'
+            parent = 'AuiFrame'
+            parent.parent = 'Panel'
+            
+            '''
+            parentAuiFrame = ''
+            if isinstance((self.Parent.Parent), wx._core.Panel):
+                parentAuiFrame = self.Parent  # when docked
+            else:
+                parentAuiFrame = self.Parent.Parent # when floating
+            itemType = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].Type
+            if itemType == 'DataFrame':
+                DFdata = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].loadedData
 
                 # show data in wx table under parent, with stored identification related to main appData
                 ##                 specific_files.dfgui.show(DFdata)
                 trimmedDF = DFdata
                 ###
+                # todo: pass these lines to seperate function
                 trimmedDFrows = min(15, len(DFdata)) # todo: put as constants from INI
                 trimmedDFcols = min(6, len(list(DFdata))) # todo: put as constants from INI
                 trimmedDF = dfActions.get_trimmed_DF(DFdata, trimmedDFrows, trimmedDFcols)
-                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
+                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentAuiFrame)
                 panelTitle = selectedItemLabel + " *trimmed* data table"
-                parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
+                parentAuiFrame.Create_DFtable(wxPnl, panelTitle)
 
                 headersList = list(DFdata.columns.values) # or list(DFdata)  # can tty also sorted(DFdata)
                 print (headersList)
@@ -250,7 +270,9 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         menu.AppendSeparator()
 
         item10 = menu.Append(wx.ID_ANY, "show list of variables")
-        item11 = menu.Append(wx.ID_ANY, "show trimmed table")
+        # item11 = menu.Append(wx.ID_ANY, "show trimmed table")
+        item11 = menu.Append(wx.ID_ANY, "show full table")
+
         item12 = menu.Append(wx.ID_ANY, "print full table to console")
         item13 = menu.Append(wx.ID_ANY, "show table summary (.info and .describe)")
         menu.AppendSeparator()
@@ -270,7 +292,8 @@ class AppData_TreeCtrl(wx.TreeCtrl):
 #        self.Bind(wx.EVT_MENU, self.OnItemFont, item4)
 
         self.Bind(wx.EVT_MENU, self.OnObjVarList, item10)
-        self.Bind(wx.EVT_MENU, self.OnObjShowTrimmed, item11)
+        # self.Bind(wx.EVT_MENU, self.OnObjShowTrimmed, item11)
+        self.Bind(wx.EVT_MENU, self.OnObjShowFullDF, item11)
         self.Bind(wx.EVT_MENU, self.OnObjPrintTable, item12)
         self.Bind(wx.EVT_MENU, self.OnObjShowSummary, item13)
         # self.Bind(wx.EVT_MENU, self.OnObjsCompareVars, item14)
@@ -304,41 +327,127 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         print ("valid tree id? : " + str(selectedItem.IsOk()))
         print ("number of items in whole tree: " + str(treeItem.GetCount()))
 
-        if appDataRelevantFileID > -1:  #todo: change -1 to some app constant
+        if appDataRelevantFileID != None and appDataRelevantFileID > -1:  #todo: change -1 to some app constant
+
+            parentAuiFrame = ''
+            if isinstance((self.Parent.Parent), wx._core.Panel):
+                parentAuiFrame = self.Parent  # when docked
+            else:
+                parentAuiFrame = self.Parent.Parent # when floating
+            itemType = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].Type
+
             print ('appDataRelFileID gt -1')
-            if self.Parent.Parent._appDataRef.mainDict[appDataRelevantFileID].Type == 'DataFrame':
-                parentWindowCtrl = self.Parent.Parent
-                DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
+            if itemType == 'DataFrame':
+                DFdata = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].loadedData
 
                 # show data in wx table under parent, with stored identification related to main appData
                 ##                 specific_files.dfgui.show(DFdata)
 #                trimmedDF = DFdata.keys()
                 trimmedDF = specific_files.dfgui.pd.DataFrame( {"keys":list(DFdata.columns.values)} ) # .transpose()
                 print (trimmedDF)
-                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentWindowCtrl)
+                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentAuiFrame)
                 panelTitle = selectedItemLabel + " variables"
-                parentWindowCtrl.Create_DFtable(wxPnl, panelTitle)
+                parentAuiFrame.Create_DFtable(wxPnl, panelTitle)
 
-#        pieces = []
-#        # todo: condition with .not. multi selection tree
-#        # item = treeItem.GetSelection()
-#        items = treeItem.GetSelections()
-#        for item in items:
-#            while item:
-#                piece = treeItem.GetItemText(item)
-#                pieces.insert(0, piece)
-#                item = treeItem.GetItemParent(item)
-#        print "item path tree : "
-#        print pieces
-        ##
-        # wx.MessageBox("msg box")
 ###################################################
 
         pass
     def OnObjShowTrimmed(self, event):
         pass
+    def OnObjShowFullDF(self, event):  #event=None):
+        """
+        show full DataFrame table
+        """
+        # todo: verify size of DF is not above MaxDisplayTableSize
+
+        # self was treeItem
+        treeItemId  = self.current    # was selectedItem
+        self.GetItemText(treeItemId)
+
+        # treeItem = event.EventObject
+        # selectedItem = event.EventObject.Selections[0]
+        # selectedItemLabel = treeItem.GetItemText(selectedItem)
+        selectedItemLabel = self.GetItemText(treeItemId)
+        # selectedItemParent = treeItem.GetItemParent(selectedItem)
+        selectedItemParent = self.GetItemParent(treeItemId)
+
+        appDataRelevantFileID = self.GetItemData(treeItemId)
+        if appDataRelevantFileID == None:
+            # print("appDataRelevantFileID == None")
+            # print("treeItem")
+            # print(treeItem)
+            # print("selectedItem")
+            # print(selectedItem)
+            # print("selectedItemLabel")
+            # print(selectedItemLabel)
+            # print("selectedItemParent:")
+            # print(selectedItemParent)
+            if selectedItemLabel != "Loaded data files":
+                appDataRelevantFileID = self.GetItemData(selectedItemParent)
+                selectedItemLabel = self.GetItemText(selectedItemParent)
+
+        # treeItem.SelectItem(selectedItem)
+
+        # print("valid tree id? : " + str(event.EventObject.Selections[0].IsOk()))
+        # print("number of items in whole tree: " + str(treeItem.GetCount()))
+        #
+        # # if (treeItem.Children):
+        #     treeItem.SelectChildren()
+
+        # treeItem.CollapseAll()
+        # treeItem.ExpandAll()
+
+        # treeRoot = treeItem.GetRootItem()
+        # treeItem.SelectItem(treeRoot)
+
+        if appDataRelevantFileID > -1:  # todo: change -1 to some app constant
+            print('appDataRelFileID gt -1')
+            # todo  if self.Parent.Parent. is valid only when tree is not docked.
+            # otherwise relate to other parent
+            parentAuiFrame = ''
+            if isinstance((self.Parent.Parent), wx._core.Panel):
+                parentAuiFrame = self.Parent  # when docked
+            else:
+                parentAuiFrame = self.Parent.Parent  # when floating
+            itemType = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].Type
+            if itemType == 'DataFrame':
+                DFdata = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].loadedData
+
+                # show data in wx table under parent, with stored identification related to main appData
+                ##                 specific_files.dfgui.show(DFdata)
+                trimmedDF = DFdata
+                wxPnl = specific_files.dfgui.show_tabel_panel(trimmedDF, parentAuiFrame)
+                panelTitle = selectedItemLabel + " full data table"
+                parentAuiFrame.Create_DFtable(wxPnl, panelTitle)
+
+
     def OnObjPrintTable(self, event):
-        pass
+        """
+        print full DataFrame table
+        """
+        treeItemId  = self.current    # was selectedItem
+        self.GetItemText(treeItemId)
+        selectedItemLabel = self.GetItemText(treeItemId)
+        selectedItemParent = self.GetItemParent(treeItemId)
+        appDataRelevantFileID = self.GetItemData(treeItemId)
+        if appDataRelevantFileID == None:
+            if selectedItemLabel != "Loaded data files":
+                appDataRelevantFileID = self.GetItemData(selectedItemParent)
+                selectedItemLabel = self.GetItemText(selectedItemParent)
+
+        if appDataRelevantFileID > -1:  # todo: change -1 to some app constant
+            parentAuiFrame = ''
+            if isinstance((self.Parent.Parent), wx._core.Panel):
+                parentAuiFrame = self.Parent  # when docked
+            else:
+                parentAuiFrame = self.Parent.Parent  # when floating
+            itemType = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].Type
+            if itemType == 'DataFrame':
+                DFdata = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].loadedData
+                panelTitle = selectedItemLabel + " full data table"
+                print (panelTitle)
+                print (DFdata)
+
     def OnObjShowSummary(self, event):
         pass
     def OnObjsCompareVars(self, event):
@@ -377,34 +486,42 @@ class AppData_TreeCtrl(wx.TreeCtrl):
         # refresh all other app_db_tree windows if any
                 
 
-    def onRightClick(self, event):
-        if __debug__:
-            print("right clicked ")
-
-        print (time.ctime())
-        treeItem        = event.EventObject
-        selectedItem    = event.EventObject.Selections[0]
-        selectedItemLabel   = treeItem.GetItemText(selectedItem)
-        selectedItemParent  = treeItem.GetItemParent(selectedItem)
-
-        appDataRelevantFileID = treeItem.GetItemData(selectedItem)
-        if appDataRelevantFileID == None:
-            appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
-
-        if appDataRelevantFileID > -1:  # todo: change -1 to some app constant
-            parentWindowCtrl = self.Parent.Parent
-            DFdata = parentWindowCtrl._appDataRef.mainDict[appDataRelevantFileID].loadedData
-            headersList = list(DFdata.columns.values)  # or list(DFdata)  # can tty also sorted(DFdata)
-
-        pieces = []
-        # item = treeItem.GetSelection()
-        item = treeItem.GetSelections()
-        while item:
-            piece = treeItem.GetItemText(item)
-            pieces.insert(0, piece)
-            item = treeItem.GetItemParent(item)
-        print ("item path tree : ")
-        print (pieces)
-        pass
-        list(parentWindowCtrl._appDataRef.mainDict[0].loadedData)
+    # def onRightClick(self, event):
+    #     if __debug__:
+    #         print("right clicked ")
+    #
+    #     print (time.ctime())
+    #     treeItem        = event.EventObject
+    #     selectedItem    = event.EventObject.Selections[0]
+    #     selectedItemLabel   = treeItem.GetItemText(selectedItem)
+    #     selectedItemParent  = treeItem.GetItemParent(selectedItem)
+    #
+    #     appDataRelevantFileID = treeItem.GetItemData(selectedItem)
+    #     if appDataRelevantFileID == None:
+    #         appDataRelevantFileID = treeItem.GetItemData(selectedItemParent)
+    #
+    #     if appDataRelevantFileID != None and appDataRelevantFileID > -1:  # todo: change -1 to some app constant
+    #
+    #         parentAuiFrame = ''
+    #         if isinstance((self.Parent.Parent), wx._core.Panel):
+    #             parentAuiFrame = self.Parent  # when docked
+    #         else:
+    #             parentAuiFrame = self.Parent.Parent # when floating
+    #         DFdata = parentAuiFrame._appDataRef.mainDict[appDataRelevantFileID].loadedData
+    #         headersList = list(DFdata.columns.values)  # or list(DFdata)  # can tty also sorted(DFdata)
+    #
+    #     pieces = []
+    #     # item = treeItem.GetSelection()
+    #     item = treeItem.GetSelections()
+    #     while item:
+    #         piece = treeItem.GetItemText(item)
+    #         pieces.insert(0, piece)
+    #         item = treeItem.GetItemParent(item)
+    #     print ("item path tree : ")
+    #     print (pieces)
+    #     pass
+    #     list(parentWindowCtrl._appDataRef.mainDict[0].loadedData)
 ###################################################
+
+if __name__=='__main__':
+    print("operated main. nothing to run. END")

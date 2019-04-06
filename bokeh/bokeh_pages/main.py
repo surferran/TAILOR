@@ -15,29 +15,37 @@ from bokeh.layouts import row, widgetbox, layout, column
 from bokeh.models import ColumnDataSource, CustomJS, BoxSelectTool, CrosshairTool  # BoxEditTool, 
 from bokeh.models.widgets import Slider, Button, DataTable, TableColumn, \
                                     NumberFormatter, CheckboxGroup, RadioGroup, \
-                                    Toggle, Panel, Tabs, CheckboxButtonGroup
+                                    Toggle, Panel, Tabs, CheckboxButtonGroup, TextInput, \
+                                    HTMLTemplateFormatter
 from bokeh.io import curdoc , push_notebook, show, output_notebook
 
 from bokeh.server.server import Server
 from bokeh.application import Application
 from bokeh.application.handlers.function import FunctionHandler
 from bokeh.plotting import figure
-#from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource 
+# from bokeh.plotting import ColumnDataSource as plt_ColumnDataSource
 
 import sys
 
-#import bk_example
+# import bk_example
 
-#import bokeh
-#print (bokeh.__version__)
+# import bokeh
+# print (bokeh.__version__)
 
-
-#DATA_DIR = join(dirname(__file__), 'static/')
-DATA_DIR = join(dirname(__file__), 'static')  # full abs path
 import os.path
+
+util_rel_path = '../../AUI_gui'
+util_path = join(dirname(__file__), util_rel_path)  # full abs path
+sys.path.append(util_path)
+import files_handler as fH
+
+"""**************************************************"""
+"""**************************************************"""
+# DATA_DIR = join(dirname(__file__), 'static/')
+DATA_DIR = join(dirname(__file__), 'static')  # full abs path
 rel_DATA_DIR = os.path.relpath(DATA_DIR)
 
-fileName_csv_source = join(rel_DATA_DIR,'salary_data.csv')
+fileName_csv_source = join(rel_DATA_DIR, 'salary_data.csv')
 
 case_test = True
 case_test = False
@@ -61,7 +69,7 @@ def doc_add_root(doc, obj, title=''):
         doc().add_root(obj)
         doc().title = title
     else:
-#        if __name__=='__main__':   # and for jupyter notebook (name is  bokeh.docu..)
+        # if __name__=='__main__':   # and for jupyter notebook (name is  bokeh.docu..)
         doc.add_root(obj)
         doc.title = title
 
@@ -123,7 +131,7 @@ def make_document(doc):
         df = df.set_index('date')
     ''' make a copy of df. therefor changing the source will not affect df.
         using df in update() will ~reset the source to original values '''
-    source = ColumnDataSource(data=df) # dict())  
+    source = ColumnDataSource(data=df) # dict())
         
     columns = [
         TableColumn(field="name", title="Employee Name"),
@@ -205,10 +213,72 @@ def make_document(doc):
     def on_radio_clicked(checked_option_ndx):
         print("cradio case")
         print(checked_option_ndx)
-#    toggle   = Toggle(label='Some on/off', button_type='success')
+    def on_text_input_change(attr, old, new):
+        print("Previous label: " + old)
+        print("attribute : ", attr)
+        print("Updated label: " + new)
+        # check if new is path. if sow - get files list
+        # print(base_path_text_Input.value, file_attr_text_Input.value)
+        ret = fH.list_files_in_path(base_path=base_path_text_Input.value, filter=file_attr_text_Input.value)
+        col1 = [itm[0] for itm in ret]
+        col2 = [itm[1] for itm in ret]
+        col3 = [itm[2] for itm in ret]
+        sourceFilteredFiles.data ={
+            'name'      : list(col1),
+            'path'      : list(col2),
+            'mod date'  : list(col3)
+        }
+        return None
+    def fTable_clicked(attr, old, new):
+        # print("fTAble clicked", attr)
+        # print(old)
+        # print(new)
+        # https://groups.google.com/a/continuum.io/forum/#!topic/bokeh/jGHbTWVqH6U
+        # https: // github.com / bokeh / bokeh / wiki / Filterable - Data - Source
+        try:
+            selected_rows_indeces = sourceFilteredFiles.selected["1d"]["indices"]
+            print("selected_rows_indeces",selected_rows_indeces)
+            # print(sourceFilteredFiles.data)
+            for ndx in selected_rows_indeces:
+                selected_files_str = sourceFilteredFiles.data['mod date'][ndx]
+                print (selected_files_str)
+        except IndexError:
+            print("index error")
+            pass
+
+        # relevant output is : selected_rows_indeces
+
+    template = """<span href="#" data-toggle="tooltip" title="<%= value %>"><%= value %></span>"""
+
+    sourceFilteredFiles = ColumnDataSource(data=pd.DataFrame()) # dict())
+    files_table_columns = [
+        TableColumn(field="name", title="Name"),
+        TableColumn(field="path", title="Path"),
+        TableColumn(field="mod date", title="modification date", formatter=HTMLTemplateFormatter(template=template))
+    ]
+    # edit dataTable: https://stackoverflow.com/questions/32321841/how-to-add-a-callback-to-bokeh-datatable
+    # https://bokeh.pydata.org/en/latest/docs/reference/model.html#bokeh.model.Model
+    # https: // bokeh.pydata.org / en / latest / docs / reference / models / widgets.tables.html
+    files_table = DataTable(source=sourceFilteredFiles, columns=files_table_columns, width=900, fit_columns=True)
+    # files_table.on_click(fTable_clicked)
+    print(sourceFilteredFiles.to_json(include_defaults=True))
+    print(files_table.to_json(include_defaults=True))
+    fTable = widgetbox(files_table, width=980)
+    sourceFilteredFiles.on_change('selected', fTable_clicked)
+
+    #    toggle   = Toggle(label='Some on/off', button_type='success')
     toggle   = Button(label='change table by source', button_type='success', callback=toggle_callback)
 #    toggleLayout = layout([toggle])
-    
+
+    # base_path_str = os.path.curdir  # relative path
+    base_path_str = os.path.abspath(os.path.curdir) # absolute format
+    base_path_text_Input = TextInput(value=base_path_str, title="base path for files:")
+    base_path_text_Input.on_change("value", on_text_input_change)
+
+    file_attr_str = '.csv'
+    file_attr_text_Input = TextInput(value=file_attr_str, title="files attribute for search")
+    file_attr_text_Input.on_change("value", on_text_input_change)
+
     checkbox = CheckboxGroup(labels=['foo', 'bar', 'baz'])
     radio = RadioGroup(labels=['2000', '2010', '2020'])    
 #    toggle.on_click(isToggleActive)
@@ -218,7 +288,6 @@ def make_document(doc):
     checkbox_button_group = CheckboxButtonGroup(
             labels=["Option 1", "Option 2", "Option 3"], active=[0, 1])
 
-    
     def set_vbar():
         fruits = ['Apples', 'Pears', 'Nectarines', 'Plums', 'Grapes', 'Strawberries']
         
@@ -279,11 +348,12 @@ def make_document(doc):
     
 #    doc.add_root(toggle)
 #    doc.add_root(figImg)
-    
-    secPanelLy = column(toggle, figImg, checkbox_button_group)
+
+    # secPanelLy = column(toggle, figImg, checkbox_button_group, base_path_text_Input, file_attr_text_Input, fTable)
+    secPanelLy = column(base_path_text_Input, file_attr_text_Input, fTable)
     tab2 = Panel(child=secPanelLy, title="other parts", closable=False)
     
-    tabs = Tabs(tabs=[ tab1, tab2 ])
+    tabs = Tabs(tabs=[ tab2, tab1 ])
     
     doc_add_root(doc, tabs)
 #    if __name__!='__main__':    
@@ -316,14 +386,14 @@ def make_page_flow(doc):
 
     def update():
         print ("slider update")
-#        current = df[df['salary'] <= slider.value].dropna()  # df ## 
+#        current = df[df['salary'] <= slider.value].dropna()  # df ##
 #        adjustment by https://groups.google.com/a/continuum.io/forum/#!topic/bokeh/fPAoHTyMcuQ
-        current = df[df['salary'] <= slider.value].dropna() # df ## 
+        current = df[df['salary'] <= slider.value].dropna() # df ##
 #        print (list(current.name))
 #        print (type(current.salary)) # <class 'pandas.core.series.Series'>
 #        print (type(current.years_experience))
         source.data = {
-            'name'             : list(current.name),  
+            'name'             : list(current.name),
             'salary'           : list(current.salary),
             'years_experience' : list(current.years_experience),
         }
@@ -415,5 +485,5 @@ else:
     else:
         # the pages are combined to the same page 
         make_document(curdoc)   #
-        make_page_flow(curdoc)  # default is port 5006
+        # # make_page_flow(curdoc)  # default is port 5006
         

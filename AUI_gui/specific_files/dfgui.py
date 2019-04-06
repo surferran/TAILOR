@@ -4,6 +4,7 @@ from __future__ import absolute_import, division, print_function
 
 try:
     import wx
+    import wx.lib.mixins.listctrl as listmix    # added on dec 2018
 
     if __debug__ == True:
         print ("imported wx from default path")
@@ -17,7 +18,7 @@ except ImportError:
     import wx
 
     if __debug__ == True:
-        print ("imported from non default path")
+        print ("imported from NON default path")
 
 
 try:
@@ -69,15 +70,18 @@ except ImportError:
 class ListCtrlDataFrame(wx.ListCtrl):
 
     # TODO: we could do something more sophisticated to come
-    # TODO: up with a reasonable column width...
-    DEFAULT_COLUMN_WIDTH = 100
+    #       up with a reasonable column width...
+    DEFAULT_COLUMN_WIDTH = 120
     TMP_SELECTION_COLUMN = 'tmp_selection_column'
 
     def __init__(self, parent, df, status_bar_callback, callingParent):
         wx.ListCtrl.__init__(
             self, parent, -1,
-            style=wx.LC_REPORT | wx.LC_VIRTUAL | wx.LC_HRULES | wx.LC_VRULES | wx.LB_MULTIPLE
+            style = wx.LC_REPORT | wx.LC_VIRTUAL
+                  | wx.LC_HRULES | wx.LC_VRULES | wx.LB_MULTIPLE
+                  | wx.BORDER_THEME
         )
+
         self.status_bar_callback = status_bar_callback
 
         self.callingParent = callingParent
@@ -107,8 +111,8 @@ class ListCtrlDataFrame(wx.ListCtrl):
     def _update_columns(self, columns):
         self.ClearAll()
         for i, col in enumerate(columns):
-            self.InsertColumn(i, col)
-            self.SetColumnWidth(i, self.DEFAULT_COLUMN_WIDTH)
+            self.InsertColumn(i, col)   # , wx.LIST_FORMAT_RIGHT)
+            self.SetColumnWidth(i, self.DEFAULT_COLUMN_WIDTH)  #      self.SetColumnWidth(0, wx.LIST_AUTOSIZE)
         # Note that we have to reset the count as well because ClearAll()
         # not only deletes columns but also the count...
         self.SetItemCount(len(self.df))
@@ -243,6 +247,7 @@ class ListCtrlDataFrame(wx.ListCtrl):
         - https://groups.google.com/forum/#!topic/wxpython-users/7BNl9TA5Y5U
         - https://groups.google.com/forum/#!topic/wxpython-users/wyayJIARG8c
         """
+        # todo: what if few items are selected?
         if self.HitTest(event.GetPosition()) != wx.NOT_FOUND:
             x, y = event.GetPosition()
             row, flags = self.HitTest((x, y))
@@ -255,12 +260,12 @@ class ListCtrlDataFrame(wx.ListCtrl):
 
             scroll_pos = self.GetScrollPos(wx.HORIZONTAL)
             # this is crucial step to get the scroll pixel units
-            # unit_x, unit_y = self.GetMainWindow().GetScrollPixelsPerUnit()
-            #
-            # col = bisect(col_locs, x + scroll_pos * unit_x) - 1
-            #
-            # value = self.df.iloc[row, col]
-            # print(row, col, scroll_pos, value)
+            unit_x, unit_y = self.GetMainWindow().GetScrollPixelsPerUnit()
+
+            col = bisect(col_locs, x + scroll_pos * unit_x) - 1
+
+            value_cell = self.df.iloc[row, col]
+            print(row, col, scroll_pos, value_cell)
             values = self.df.iloc[row]       #ran
             print(" *** copying to clipboard : ")
             print(row, scroll_pos, values)  #ran
@@ -275,6 +280,15 @@ class ListCtrlDataFrame(wx.ListCtrl):
             # if keys column - find the relevant DF and plot that field. 
             '''
             if 'keys' in values.keys():
+                # todo: call popup menu of variable list content:
+                '''
+                    - plot values
+                    - check box to 
+                    - show column/table of selected variable values (data vector)
+                    - add to comparable variables list 
+                    ( todo: -add icon of folder 2 open ini/json directory)
+                '''
+                menuDict = {'item text': 'plot variable', 'func': self.callingParent.Create_Var_Plot}
                 self.callingParent.Create_Var_Plot(str(values['keys']))
             
             
