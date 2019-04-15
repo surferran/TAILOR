@@ -7,7 +7,7 @@
 # https://python.g-node.org/python-summerschool-2013/_media/wiki/datavis/matplotlib_tutorial.html
 # https://matplotlib.org/api/collections_api.html
 
-
+import matplotlib
 
 import matplotlib.image as mpimg
 import numpy as np
@@ -15,28 +15,29 @@ from PIL import Image
 
 import  networkx    as nx
 from    xml.dom     import minidom
-# import matplotlib
 import  matplotlib.pyplot as plt
 
 from networkx.readwrite import json_graph
 import json
 
-print "nx version : " + nx.__version__
+print ("nx version : " + nx.__version__)
 
 
 ###############################################
+matplotlib.use('WXAgg')
 import matplotlib
-print matplotlib.rc.func_globals['defaultParams']
+#print (matplotlib.rc.func_globals['defaultParams'])
+print (matplotlib.rc.__globals__['defaultParams'])
 matplotlib.get_backend()
 #matplotlib.rcdefaults() # set params back to defaults.
-print matplotlib.matplotlib_fname()
+print (matplotlib.matplotlib_fname())
 #matplotlib.rcsetup
 matplotlib.rc_params()
 ###############################################
 
 if __name__=='__main__':
     doc = minidom.parse("./example.xml")
-    output_rel_path = "../runtime_outputs/"
+    output_rel_path = "./runtime_outputs/"
 else:
     doc = minidom.parse("./specific_files/example.xml")
     output_rel_path = "./runtime_outputs/"
@@ -75,26 +76,26 @@ for staff in staffs:
             G_wVirtualEdges.add_node(virtualEdgeNodeName,node_type="VirtualEdgeNode",name=name)
             G_wVirtualEdges.add_edge(source, virtualEdgeNodeName,var_name="VirtualEdge")
             G_wVirtualEdges.add_edge(virtualEdgeNodeName, unit_name,var_name="VirtualEdge")
-print "*** G printouts: ***"
-print G
+print ("*** G printouts: ***")
+print( G)
 listOfNodes = G.nodes()
 filledEdges= G.edges(data='var_name')
-print filledEdges
-print G.nodes(data=True)
-print G.edges()
-print G.edges(data=True)
-print len(G)
-print G.number_of_nodes()
-print G.order()
-print G.size()
+print( filledEdges)
+print( G.nodes(data=True))
+print( G.edges())
+print( G.edges(data=True))
+#print len(G)
+#print G.number_of_nodes()
+#print G.order()
+#print G.size()
 
 listOfNodes_GwV = G_wVirtualEdges.nodes()
 filledEdges_GwV = G_wVirtualEdges.edges(data='var_name')
-print filledEdges_GwV
+#print filledEdges_GwV
 
-print "Gimgs nodes: "
+#print "Gimgs nodes: "
 listImgs = Gimgs.nodes()
-print listImgs
+#print listImgs
 
 ###############################################
 
@@ -118,7 +119,7 @@ node_circle_size=3700   # unknown units
 for node in listOfNodes:
     pos[node]=pos[node]*1000 + node_circle_size/20.
 
-print pos
+print (pos)
 
 # nodes
 nx.draw_networkx_nodes(G,pos,node_size=node_circle_size, node_color="white",node_shape='o',alpha=0.5) # ##ACCEPTS: [\/|- +xoO.* ]
@@ -157,15 +158,15 @@ for node in listOfNodes:
     pass
 
 thumb_size=1200
-pos0 = pos[listOfNodes[0]]-(thumb_size/20.)
-pos1 = pos[listOfNodes[1]]-(thumb_size/20.)
+pos0 = pos[list(listOfNodes)[0]]-(thumb_size/20.)
+pos1 = pos[list(listOfNodes)[1]]-(thumb_size/20.)
 
 # img0 =mpimg.imread(listImgs[0])  # todo:check with this way
-img0=Image.open(listImgs[0])
+img0=Image.open(list(listImgs)[0])
 
 img0.thumbnail((thumb_size, thumb_size), Image.ANTIALIAS) # resizes image in-place
 # img1 =mpimg.imread(listImgs[1])
-img1=Image.open(listImgs[1])
+img1=Image.open(list(listImgs)[1])
 img1.thumbnail((thumb_size, thumb_size), Image.ANTIALIAS) # resizes image in-place
 
 rows0=img0.size[0]  #rows
@@ -219,7 +220,7 @@ plotedEdges_GwV = nx.draw_networkx_edges(G_wVirtualEdges,pos_GwV,width=2,alpha=0
 
 d= nx.coloring.greedy_color(G_wVirtualEdges, strategy=nx.coloring.strategy_largest_first)
 
-print pos_GwV
+print( pos_GwV)
 # nx.draw(G)
 # plt.axis('off')
 
@@ -262,7 +263,7 @@ for node in G_wVirtualEdges.nodes(data=True):
     if node[1]["node_type"]=="real":
         realNodes.append(node)
         realNodes_namesList.append(node[0])
-print realNodes
+print( realNodes)
 # nodes
 nx.draw_networkx_nodes(G_wVirtualEdges,pos_GwV,nodelist=realNodes_namesList,node_size=node_circle_size, node_color="blue",node_shape='o',alpha=0.25) # ##ACCEPTS: [\/|- +xoO.* ]
 
@@ -306,37 +307,37 @@ with open(output_rel_path+'jsonGwVout.json','w') as fJS:
 # plt.axis("off")
 # plt.colorbar()
 def on_pick_Edges(event):
-    print "pick event Edges"
-    print event.artist
-    print event.canvas.events
-    print event.canvas.filetypes
-    print plotedEdges._paths
-    print plotedNodes._offsets
+    print( "pick event Edges")
+    print (event.artist)
+    print (event.canvas.events)
+    print (event.canvas.filetypes)
+    print (plotedEdges._paths)
+    print (plotedNodes._offsets)
 
 def on_pick_Nodes(event):
-    print "pick event Nodes"
-    print event.artist
-    print event.canvas.events
+    print( "pick event Nodes")
+    print( event.artist)
+    print( event.canvas.events)
 
 def on_Edge_click(items):
-    print "*on_Edge_click*"
+    print ("*on_Edge_click*")
     # todo: show the list of edges in GUI
-    for item in items:
-        print filledEdges[item]  # from the input that is creating the plotedEdges
+    for item in list(items):
+        print (list(filledEdges)[item])  # from the input that is creating the plotedEdges
 
 def on_Node_click(items, nodesColorsArray):
-    print "*on_Node_click*"
+    print ("*on_Node_click*")
     # todo: highlight the node circle and edges from it
     # for item in items: print listOfNodes[item]
     selectedNode  = str(listOfNodes[items])  # the input for creating the plotedNodes
     nodeColorPrev = nodesColorsArray[items]
 
-    print ax.collections[0].properties()
-    print selectedNode
+    print (ax.collections[0].properties())
+    print (selectedNode)
 
-    print G[selectedNode]               # dict type
-    print G.neighbors(selectedNode)     # list type
-    print G.predecessors(selectedNode)  # list type . includes inputs
+    print (G[selectedNode])               # dict type
+    print (G.neighbors(selectedNode))     # list type
+    print (G.predecessors(selectedNode))  # list type . includes inputs
 
     # if isinstance(lastSelectedNode):
     #     nx.draw_networkx_nodes(G,pos,nodelist=lastSelectedNode,node_size=node_circle_size, node_color="blue",node_shape='o',alpha=0.25) # ##ACCEPTS: [\/|- +xoO.* ]
@@ -365,24 +366,30 @@ def on_Node_click(items, nodesColorsArray):
     # lastSelectedNode = listOfNodes[items]
 
 def on_Node_dblClk(items):
-    print "*on_Node_Dbl_click*"
+    print ("*on_Node_Dbl_click*")
     # todo: in separate window show the node circle and edges from it and to it with neighbours
     for item in items:
-        print listOfNodes[item]  # the input for creating the plotedNodes
+        print (listOfNodes[item])  # the input for creating the plotedNodes
 
 def on_press(event):
 
     print('button=%d, x=%d, y=%d, xdata=%f, ydata=%f' %
           (event.button, event.x, event.y, event.xdata, event.ydata))
-    # print "on press"
-    # if event.dblclick:
-    #     print("DBLCLICK", event) # in actual: includes also a heading 'down' event
-    # else:
-    #     print("DOWN    ", event)
-    # print event.inaxes
-    # fig.canvas.draw_idle()
-    eventContainsEdges = plotedEdges.contains(event)
-    print eventContainsEdges
+    print ("on press")
+    if event.dblclick:
+        print("DBLCLICK", event) # in actual: includes also a heading 'down' event
+    else:
+        print("DOWN    ", event)
+    print (event.inaxes)
+    fig.canvas.draw_idle()
+#    eventContainsEdges = plotedEdges.contains(event)
+    eventContainsEdges=[]
+    for pEdg in plotedEdges:
+        if pEdg.contains(event)[0] :
+            print(pEdg.contains(event))
+            eventContainsEdges.append(pEdg)
+    print ("eventContainsEdges:",eventContainsEdges)
+    print("dir(plotedEdges[0])",str(dir(plotedEdges[0])))
     if (eventContainsEdges[0]):
         # print "pressed on selected edge"
     #     open other window with the selected edges/nodes
@@ -391,7 +398,7 @@ def on_press(event):
            on_Edge_click(items)
     else:
         eventContainsNodes = plotedNodes.contains(event)
-        print eventContainsNodes
+        print (eventContainsNodes)
         if (eventContainsNodes[0]):
             # print "pressed on selected node"
             #     open other window with the selected edges/nodes
@@ -408,21 +415,21 @@ def on_press(event):
     # print "plot paths len"  , len(plotedNodes._paths)
     pass
 def on_release(event):
-    print "on release"
-    print event.inaxes
+    print ("on release")
+    print (event.inaxes)
     pass
 def on_motion(event):
-    print "on motion"
-    print event.inaxes
+    print ("on motion")
+    print (event.inaxes)
     pass
 
 # check plotedEdges._paths
 
-plotedEdges._picker=True
-plotedEdges.figure.canvas.mpl_connect('button_press_event', on_press)
+plotedEdges[0]._picker=True
+plotedEdges[0].figure.canvas.mpl_connect('button_press_event', on_press)
 # plotedEdges.figure.canvas.mpl_connect('pick_event', on_pick_Edges)  ## button_release_event, motion_notify_event
 plotedNodes._picker=True
-plotedEdges.figure.canvas.mpl_connect('button_press_event', on_press)
+plotedNodes.figure.canvas.mpl_connect('button_press_event', on_press)
 # plotedNodes.figure.canvas.mpl_connect('pick_event', on_pick_Nodes)
 
 

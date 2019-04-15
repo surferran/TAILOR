@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <myXmlFile>
 	<system name="quads squad">
-		<unit name="quad 1" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/quad.jpg">
+		<unit name="quad 1" img_path="./imgs/quad.jpg">
 			<var_in var_name="imu1_linear_accelerations" var_source="physics" data_units="m/s^2" ></var_in>
 			<var_in var_name="imu1_angular_rates" var_source="physics" data_units="rad/sec" ></var_in>
 			<var_in var_name="imu1_magnetometer_angles" var_source="physics" data_units="rad" ></var_in>			
@@ -11,7 +11,7 @@
 			<var_in var_name="weight_force_Z" var_source="payload" data_units="N" ></var_in>
 			<var_in var_name="weight_force_XY" var_source="payload" data_units="N" ></var_in>
 		</unit>
-		<unit name="quad 2" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/quad.jpg">
+		<unit name="quad 2" img_path="./imgs/quad.jpg">
 			<var_in var_name="imu2_linear_accelerations" var_source="physics" data_units="m/s^2" ></var_in>
 			<var_in var_name="imu2_angular_rates" var_source="physics" data_units="rad/sec" ></var_in>
 			<var_in var_name="imu2_magnetometer_angles" var_source="physics" data_units="rad" ></var_in>			
@@ -21,7 +21,7 @@
 			<var_in var_name="weight_force_Z" var_source="payload" data_units="N" ></var_in>
 			<var_in var_name="weight_force_XY" var_source="payload" data_units="N" ></var_in>
 		</unit>
-		<unit name="payload" parent="quads squad" img_path="C:/Users/Ran_the_User/Documents/Current Work/py/system_images/slung-load.jpg">
+		<unit name="payload" parent="quads squad" img_path="./imgs/slung-load.jpg">
 			<var_in var_name="lift_force_Z" var_source="quad 1" data_units="N" ></var_in>
 			<var_in var_name="side_force_XY" var_source="quad 1" data_units="N" ></var_in>
 			<var_in var_name="lift_force_Z" var_source="quad 2" data_units="N" ></var_in>

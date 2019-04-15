@@ -1,0 +1,269 @@
+{
+    "directed": true,
+    "multigraph": false,
+    "graph": {
+        "name": "Graph with added virtual edges nodes"
+    },
+    "nodes": [
+        {
+            "img_path": "./imgs/quad.jpg",
+            "node_type": "real",
+            "id": "quad 1"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu1_linear_accelerations",
+            "id": "physics__imu1_linear_accelerations__quad 1"
+        },
+        {
+            "id": "physics"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu1_angular_rates",
+            "id": "physics__imu1_angular_rates__quad 1"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu1_magnetometer_angles",
+            "id": "physics__imu1_magnetometer_angles__quad 1"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu1_barometer_pressure",
+            "id": "physics__imu1_barometer_pressure__quad 1"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "weight_force_Z",
+            "id": "payload__weight_force_Z__quad 1"
+        },
+        {
+            "img_path": "./imgs/slung-load.jpg",
+            "node_type": "real",
+            "id": "payload"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "weight_force_XY",
+            "id": "payload__weight_force_XY__quad 1"
+        },
+        {
+            "img_path": "./imgs/quad.jpg",
+            "node_type": "real",
+            "id": "quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu2_linear_accelerations",
+            "id": "physics__imu2_linear_accelerations__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu2_angular_rates",
+            "id": "physics__imu2_angular_rates__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu2_magnetometer_angles",
+            "id": "physics__imu2_magnetometer_angles__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "imu2_barometer_pressure",
+            "id": "physics__imu2_barometer_pressure__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "weight_force_Z",
+            "id": "payload__weight_force_Z__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "weight_force_XY",
+            "id": "payload__weight_force_XY__quad 2"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "lift_force_Z",
+            "id": "quad 1__lift_force_Z__payload"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "side_force_XY",
+            "id": "quad 1__side_force_XY__payload"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "lift_force_Z",
+            "id": "quad 2__lift_force_Z__payload"
+        },
+        {
+            "node_type": "VirtualEdgeNode",
+            "name": "side_force_XY",
+            "id": "quad 2__side_force_XY__payload"
+        }
+    ],
+    "links": [
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 1",
+            "target": "quad 1__lift_force_Z__payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 1",
+            "target": "quad 1__side_force_XY__payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu1_linear_accelerations__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu1_linear_accelerations__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu1_angular_rates__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu1_magnetometer_angles__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu1_barometer_pressure__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu2_linear_accelerations__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu2_angular_rates__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu2_magnetometer_angles__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics",
+            "target": "physics__imu2_barometer_pressure__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu1_angular_rates__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu1_magnetometer_angles__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu1_barometer_pressure__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload__weight_force_Z__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload",
+            "target": "payload__weight_force_Z__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload",
+            "target": "payload__weight_force_XY__quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload",
+            "target": "payload__weight_force_Z__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload",
+            "target": "payload__weight_force_XY__quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload__weight_force_XY__quad 1",
+            "target": "quad 1"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 2",
+            "target": "quad 2__lift_force_Z__payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 2",
+            "target": "quad 2__side_force_XY__payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu2_linear_accelerations__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu2_angular_rates__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu2_magnetometer_angles__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "physics__imu2_barometer_pressure__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload__weight_force_Z__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "payload__weight_force_XY__quad 2",
+            "target": "quad 2"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 1__lift_force_Z__payload",
+            "target": "payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 1__side_force_XY__payload",
+            "target": "payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 2__lift_force_Z__payload",
+            "target": "payload"
+        },
+        {
+            "var_name": "VirtualEdge",
+            "source": "quad 2__side_force_XY__payload",
+            "target": "payload"
+        }
+    ]
+}

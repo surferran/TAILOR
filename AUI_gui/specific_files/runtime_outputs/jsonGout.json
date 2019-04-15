@@ -1,0 +1,138 @@
+{
+    "directed": true,
+    "multigraph": true,
+    "graph": {
+        "name": "Simulated System Graph"
+    },
+    "nodes": [
+        {
+            "img_path": "./imgs/quad.jpg",
+            "id": "quad 1"
+        },
+        {
+            "id": "physics"
+        },
+        {
+            "img_path": "./imgs/slung-load.jpg",
+            "id": "payload"
+        },
+        {
+            "img_path": "./imgs/quad.jpg",
+            "id": "quad 2"
+        }
+    ],
+    "links": [
+        {
+            "var_name": "lift_force_Z",
+            "units": "N",
+            "source": "quad 1",
+            "target": "payload",
+            "key": 0
+        },
+        {
+            "var_name": "side_force_XY",
+            "units": "N",
+            "source": "quad 1",
+            "target": "payload",
+            "key": 1
+        },
+        {
+            "var_name": "imu1_linear_accelerations",
+            "units": "m/s^2",
+            "source": "physics",
+            "target": "quad 1",
+            "key": 0
+        },
+        {
+            "var_name": "imu1_angular_rates",
+            "units": "rad/sec",
+            "source": "physics",
+            "target": "quad 1",
+            "key": 1
+        },
+        {
+            "var_name": "imu1_magnetometer_angles",
+            "units": "rad",
+            "source": "physics",
+            "target": "quad 1",
+            "key": 2
+        },
+        {
+            "var_name": "imu1_barometer_pressure",
+            "units": "bar",
+            "source": "physics",
+            "target": "quad 1",
+            "key": 3
+        },
+        {
+            "var_name": "imu2_linear_accelerations",
+            "units": "m/s^2",
+            "source": "physics",
+            "target": "quad 2",
+            "key": 0
+        },
+        {
+            "var_name": "imu2_angular_rates",
+            "units": "rad/sec",
+            "source": "physics",
+            "target": "quad 2",
+            "key": 1
+        },
+        {
+            "var_name": "imu2_magnetometer_angles",
+            "units": "rad",
+            "source": "physics",
+            "target": "quad 2",
+            "key": 2
+        },
+        {
+            "var_name": "imu2_barometer_pressure",
+            "units": "bar",
+            "source": "physics",
+            "target": "quad 2",
+            "key": 3
+        },
+        {
+            "var_name": "weight_force_Z",
+            "units": "N",
+            "source": "payload",
+            "target": "quad 1",
+            "key": 0
+        },
+        {
+            "var_name": "weight_force_XY",
+            "units": "N",
+            "source": "payload",
+            "target": "quad 1",
+            "key": 1
+        },
+        {
+            "var_name": "weight_force_Z",
+            "units": "N",
+            "source": "payload",
+            "target": "quad 2",
+            "key": 0
+        },
+        {
+            "var_name": "weight_force_XY",
+            "units": "N",
+            "source": "payload",
+            "target": "quad 2",
+            "key": 1
+        },
+        {
+            "var_name": "lift_force_Z",
+            "units": "N",
+            "source": "quad 2",
+            "target": "payload",
+            "key": 0
+        },
+        {
+            "var_name": "side_force_XY",
+            "units": "N",
+            "source": "quad 2",
+            "target": "payload",
+            "key": 1
+        }
+    ]
+}
