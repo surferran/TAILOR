@@ -1,1 +1,2 @@
 1/ aui gui - open list of variables in notebookAui. when dblClked in AppDataTree.
+2/ create and verify doxygen

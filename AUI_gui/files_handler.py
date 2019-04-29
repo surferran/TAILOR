@@ -244,9 +244,9 @@ def load_CSV_to_appData(file_details, appDataBase, headerVar = True):
     csv_df   = load_CSV_to_dataframe(file_details['originalGivenName'], headerVar)
     print (csv_df)
     if __debug__ and False:
-	    print ("available DataFrame actions are: ")
-    	print (dir(pd.DataFrame))
-    	print (appDataBase)
+	    print("available DataFrame actions are: ")
+#        print (dir(pd.DataFrame))
+#    	print (appDataBase)
     # add_dict_to_appData(csv_dict, appDataBase)
     add_df_to_appData(file_details, csv_df, appDataBase)
     if __debug__:

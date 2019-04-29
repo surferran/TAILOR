@@ -1,28 +1,32 @@
-'''
+"""
+@file : AUO_MAIN.py
+
+@description 
+
 main AUI creation.
 the manager of all gui .
 
-major reference of gui applications and tutorials:
-http://www.infinity77.net/pycon/tutorial/pybr/wxpython.html - wxPython tutorial
-
-to consider:
-http://docs.enthought.com/chaco/ - building interactive and custom 2-D plots and visualizations
-
-http://doc.frapp.fr/doku.php?id=en:programmation:python:boa:help:boagettingstarted - boa tutorial
- https://bitbucket.org/cwt/boa-constructor/downloads/ - Boa aims to be a simple Delphi for wxPython.
- https://wiki.wxpython.org/Boa%20Constructor
-
-AvoPlot : https://openresearchsoftware.metajnl.com/articles/10.5334/jors.ai/
+major reference of gui applications and tutorials (Hands-on wxPython, 2.9.4):
+http://www.infinity77.net/pycon/tutorial/pybr/wxpython.html (full zip: http://bit.ly/TgyfRN)
 
 
-31/03/18:
+
+31/03/18, 25/4/19:
 OBJECTIVES:
 ...TBD...
-LITERATURE REVIEW :
-...TBD...
 
-'''
-''''''
+LITERATURE REVIEW (background references before getting to this project):
+
+    http://docs.enthought.com/chaco/ - building interactive and custom 2-D plots and visualizations
+
+    http://doc.frapp.fr/doku.php?id=en:programmation:python:boa:help:boagettingstarted - boa tutorial
+    https://bitbucket.org/cwt/boa-constructor/downloads/ - Boa aims to be a simple Delphi for wxPython.
+    https://wiki.wxpython.org/Boa%20Constructor
+
+    AvoPlot : https://openresearchsoftware.metajnl.com/articles/10.5334/jors.ai/
+
+"""
+
 from AUI_GlobalImports import *
 
 # def focusFollowsMouse(window):
@@ -32,9 +36,9 @@ class AuiFrame(wx.Frame):
 
     def __init__(self, parent, id=wx.ID_ANY, title="", pos= wx.DefaultPosition,
                  size=wx.DefaultSize,
-                 style=wx.DEFAULT_FRAME_STYLE
-                       |wx.SUNKEN_BORDER
-                       |wx.STAY_ON_TOP,             #ran
+                 style = wx.DEFAULT_FRAME_STYLE
+                        |wx.SUNKEN_BORDER
+                        |wx.STAY_ON_TOP,       #ran : todo: set only for minimal template. not all
                  log=None):
 
         global appDataObj
@@ -64,7 +68,6 @@ class AuiFrame(wx.Frame):
         self.log = log
 
         self.CreateStatusBar()
-        # self.GetStatusBar().SetStatusText("Ready")
         self.status_bar_callback(0, "Ready by new BAR")
 
         self.BuildPanes()
@@ -383,16 +386,15 @@ class AuiFrame(wx.Frame):
         ''''''
         self._user_settings_file = './user_prefs/settings_Toolbars_Items.json'
         user_ToolBars = fConverters.load_JSON_file_to_Dict(self._user_settings_file)
-        # user_ToolBars = fConverters.load_JSON_file_to_Dict('./user_prefs/settings_Toolbars_Items.json')
 
         print (user_ToolBars)
         print (user_ToolBars['tb_1'])
         
         tb_prop = user_ToolBars['tb_1']
-        favorites_tbar = self.BuildToolBar(tb_prop)
+        favorites_tbar = self.BuildToolBar(tb_prop)  # tb4
 
         tb_prop = user_ToolBars['tb_2']
-        vertical_tbar = self.BuildToolBar(tb_prop)
+        vertical_tbar = self.BuildToolBar(tb_prop)  # tb5
         ''''''
 
         tb6 = aui.AuiToolBar(self, -1, wx.DefaultPosition, wx.DefaultSize,
@@ -2188,7 +2190,12 @@ class AuiFrame(wx.Frame):
 
 
     def CreateNotebook(self):
-
+        """
+        creates notebook of type AuiNotebook.
+        sets the notebook tabs pages. 
+        each is added by AddPage.
+        """
+        
         # create the notebook off-window to avoid flicker
         client_size = self.GetClientSize()
         ctrl = aui.AuiNotebook(self, -1, wx.Point(client_size.x, client_size.y),
@@ -2220,37 +2227,39 @@ class AuiFrame(wx.Frame):
         flex.AddGrowableCol(1)
         panel.SetSizer(flex)
         ctrl.AddPage(panel, "Disabled", False, page_bmp)
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "DClick Edit!", False, page_bmp)
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "Blue Tab")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "A Control")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 4")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 5")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 6")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 7 (longer title)")
-
-        ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
-                                 wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 8")
+        
+        if 1==2:     # ran
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "DClick Edit!", False, page_bmp)
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "Blue Tab")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "A Control")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 4")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 5")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 6")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 7 (longer title)")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 8")
+    
+            ctrl.SetPageTextColour(2, wx.RED)
+            ctrl.SetPageTextColour(3, wx.BLUE)
+            ctrl.SetRenamable(2, True)
 
         # Demonstrate how to disable a tab
         ctrl.EnableTab(1, False)
-
-        ctrl.SetPageTextColour(2, wx.RED)
-        ctrl.SetPageTextColour(3, wx.BLUE)
-        ctrl.SetRenamable(2, True)
 
         return ctrl
 
