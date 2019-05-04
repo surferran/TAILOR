@@ -417,6 +417,43 @@ class AuiFrame(wx.Frame):
         self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
                           Name("test1").Caption("Pane Caption").Top().MinimizeButton(True))
 
+        if 1==2:    # extra 6+3 SizeReportCtrl
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test2").Caption("Client Size Reporter").
+                              Bottom().Position(1).CloseButton(True).MaximizeButton(True).
+                              MinimizeButton(True).CaptionVisible(True, left=True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test3").Caption("Client Size Reporter").
+                              Bottom().CloseButton(True).MaximizeButton(True).MinimizeButton(True).
+                              CaptionVisible(True, left=True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test4").Caption("Pane Caption").Left())
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test5").Caption("No Close Button").Right().CloseButton(False))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test6").Caption("Client Size Reporter").Right().Row(1).
+                              CloseButton(True).MaximizeButton(True).MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test7").Caption("Client Size Reporter").Left().Layer(1).
+                              CloseButton(True).MaximizeButton(True).MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test9").Caption("Min Size 200x100").
+                              BestSize(wx.Size(200, 100)).MinSize(wx.Size(200, 100)).Bottom().Layer(1).
+                              CloseButton(True).MaximizeButton(True).MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().
+                              Name("test11").Caption("Fixed Pane").
+                              Bottom().Layer(1).Position(2).Fixed().MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateSizeReportCtrl(), aui.AuiPaneInfo().Name("sizereport_content").
+                              CenterPane().Hide().MinimizeButton(True))
+
         self._mgr.AddPane(self.CreateTreeCtrl(), aui.AuiPaneInfo().Name("test8").Caption("Tree Pane").
                           Left().Layer(1).Position(1).CloseButton(True).MaximizeButton(True).
                           MinimizeButton(True))
@@ -443,6 +480,20 @@ class AuiFrame(wx.Frame):
                           Dockable(False).Float().Hide().MinimizeButton(True))
 
         # create some center panes
+
+        if 1==2:    # hiden by default, shown later by replacing the NoteBook
+            self._mgr.AddPane(self.CreateGrid(), aui.AuiPaneInfo().Name("grid_content").
+                              CenterPane().Hide().MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateTreeCtrl(), aui.AuiPaneInfo().Name("tree_content").
+                              CenterPane().Hide().MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateTextCtrl(), aui.AuiPaneInfo().Name("text_content").
+                              CenterPane().Hide().MinimizeButton(True))
+
+            self._mgr.AddPane(self.CreateHTMLCtrl(), aui.AuiPaneInfo().Name("html_content").
+                              CenterPane().Hide().MinimizeButton(True))
+
         self._mgr.AddPane(self.CreateRan_DandDCtrl(), aui.AuiPaneInfo().Name("DandD_content").
                           CenterPane().Hide().MinimizeButton(True))
 
@@ -567,7 +618,7 @@ class AuiFrame(wx.Frame):
             print (self.GetParent().GetParent())
             print (self.GetParent().GetParent().GetPosition())
         # set locations
-        if 2==21:
+        if 2==2:
             # desiredFramePos = wx.Point(1200,100)
             desiredFramePos = wx.Point(683, 384) #todo: take from config file / user preffs.
             previousSize = self.GetParent().GetParent().GetPosition()  #todo: check to relate self. or global
@@ -623,8 +674,7 @@ class AuiFrame(wx.Frame):
         self._nb_perspectives.append(nb_perspective_default)
 
         self._mgr.LoadPerspective(perspective_default)  ##
-        if 1==2:  # todo: condition with user input from file
-            self._mgr.LoadPerspective(perspective_min2)  ## ran
+        self._mgr.LoadPerspective(perspective_min2)  ## ran
         ''''''''''''''''''''''''
 
     def keepPerspectivesToFile(self):
@@ -2176,10 +2226,40 @@ class AuiFrame(wx.Frame):
         flex.AddGrowableRow(3)
         flex.AddGrowableCol(1)
         panel.SetSizer(flex)
-        ctrl.AddPage(panel, "Disabled-not", False, page_bmp)
+        ctrl.AddPage(panel, "Disabled", False, page_bmp)
+        
+        if 1==2:     # ran
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "DClick Edit!", False, page_bmp)
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "Blue Tab")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "A Control")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 4")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 5")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 6")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 7 (longer title)")
+    
+            ctrl.AddPage(wx.TextCtrl(ctrl, -1, "Some more text", wx.DefaultPosition, wx.DefaultSize,
+                                     wx.TE_MULTILINE|wx.NO_BORDER), "wxTextCtrl 8")
+    
+            ctrl.SetPageTextColour(2, wx.RED)
+            ctrl.SetPageTextColour(3, wx.BLUE)
+            ctrl.SetRenamable(2, True)
 
         # Demonstrate how to disable a tab
-#        ctrl.EnableTab(1, False)
+        ctrl.EnableTab(1, False)
 
         return ctrl
 
