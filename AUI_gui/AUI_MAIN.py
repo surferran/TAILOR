@@ -37,8 +37,8 @@ class AuiFrame(wx.Frame):
     def __init__(self, parent, id=wx.ID_ANY, title="", pos= wx.DefaultPosition,
                  size=wx.DefaultSize,
                  style = wx.DEFAULT_FRAME_STYLE
-                        |wx.SUNKEN_BORDER
-                        |wx.STAY_ON_TOP,       #ran : todo: set only for minimal template. not all
+                        |wx.SUNKEN_BORDER,
+                        #|wx.STAY_ON_TOP,       #ran : todo: set only for minimal template. not all
                  log=None):
 
         global appDataObj

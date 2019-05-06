@@ -11,7 +11,7 @@ import data_handlers.formats_converters as fConverters
 # note: this class depends on the controls IDs.
 class JsonControlPanel(wx.Panel):
 
-    JsonControlPanel_fileName   = 'JsonControlPanel.json'
+    JsonControlPanel_fileName   = './user_prefs/JsonControlPanel.json'
     spinCtrls                   =   []
     btns_index                  =   -1
 

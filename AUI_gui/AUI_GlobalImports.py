@@ -27,7 +27,8 @@ except:
 sys.path.append(os.path.split(dirName)[0])
 
 ''' separated files from the original main AUI file '''
-from Intro_html_text        import *
+from user_prefs.Intro_html_text        import *
+
 from CSizeReportCtrl        import *
 from CProgressGauge         import *
 from CAppDataTree           import *
